@@ -6,8 +6,7 @@ import 'rxjs/add/operator/first';
 import 'rxjs/add/operator/publishLast'
 import 'rxjs/add/operator/first'
 import {GoodsListService} from "../../../shared/services/goods-list.service";
-import {PcSearchData} from "../../../shared/model/pc-search-data";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {PcListPageNum} from "../../../shared/model/pc-list-page-num";
 import {FilterData} from "../../../shared/model/filter-data";
 
@@ -31,15 +30,15 @@ export class SidebarComponent implements OnInit {
     {name: '높은 등급순', value: 'gradeDESC'}
   ];
 
-  constructor(private fb: FormBuilder, private goodsListService: GoodsListService, private route: ActivatedRoute) {
-
+  constructor(private fb: FormBuilder, private goodsListService: GoodsListService, private route: ActivatedRoute,
+              private router: Router) {
   }
 
 
   ngOnInit() {
     this.route.params.subscribe(params => {
       this.pcType = params['pcType'];
-      this.pageNumber = params['num'];
+      this.pageNumber = parseInt(params['num']);
       }
     );
     this.createForm();
@@ -83,7 +82,27 @@ export class SidebarComponent implements OnInit {
     };
 
     this.goodsListService.setFilterData(filterData);
-    this.goodsListService.loadPage(this.pcType, 1).map(data => data[0]).subscribe();
-    this.goodsListService.loadPage(this.pcType, 1).map(data => data[1]).subscribe();
+    this.goodsListService.loadSpecificPage(this.pcType, 1).map(data => data[0]).subscribe(
+      () => {}
+    );
+    this.goodsListService.loadSpecificPage(this.pcType, 1).map(data => data[1]).subscribe(
+      () => {}
+    );
+  }
+
+  toPrePage() {
+    this.goodsListService.prePage(this.pcType, this.pageNumber).map(data => data[1]).subscribe(
+      () => {},
+      () => {},
+      () => this.router.navigate(['/goods/list', this.pcType, this.pageNumber - 1])
+    );
+  }
+
+  toNextPage() {
+    this.goodsListService.nextPage(this.pcType, this.pageNumber).map(data => data[1]).subscribe(
+      () => {},
+      () => {},
+      () => this.router.navigate(['/goods/list', this.pcType, this.pageNumber + 1])
+    );
   }
 }

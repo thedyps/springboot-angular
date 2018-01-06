@@ -184,6 +184,17 @@
 		  O.name IN (<foreach collection="filterOsName" item="e" separator=",">#{e}</foreach>)
 		</if>
 
+		<if test="sortWord != '-1'">
+			<if test="sortWord == 'priceASC'">
+				ORDER BY pc_price ASC
+			</if>
+			<if test="sortWord == 'priceDESC'">
+				ORDER BY pc_price DESC
+			</if>
+			<if test="sortWord == 'gradeDESC'">
+				ORDER BY pc_grade DESC
+			</if>
+		</if>
 		) result
 		) WHERE rnum BETWEEN #{start, javaType=int, jdbcType=NUMERIC} AND #{end, javaType=int, jdbcType=NUMERIC}
 	</select>

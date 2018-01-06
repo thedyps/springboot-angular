@@ -64,11 +64,8 @@
       </div>
     </li>
   </ul>
-  <div>
+  <div class="btn-toolbar-wrapper">
     <div class="btn-toolbar" role="toolbar" *ngIf="pcListPageNum$ | async as pcListPageNum">
-      <h1>
-        테스팅
-      </h1>
       <div class="btn-group" role="group">
         <button type="button" class="btn btn-default" *ngIf="pcListPageNum.startPage > 10"
                 [routerLink]="['/goods/list', pcType, pcListPageNum.startPage-10]"

@@ -16,7 +16,11 @@ export class NavbarComponent implements OnInit {
 
   typeChange(pcType: string) {
     this.goodsListService.setFilterData(UNKNOWN_SEARCH_DATA);
-    this.goodsListService.loadPage(pcType, 1).map(data => data[0]).subscribe();
-    this.goodsListService.loadPage(pcType, 1).map(data => data[1]).subscribe();
+    this.goodsListService.loadSpecificPage(pcType, 1).map(data => data[0]).subscribe(
+      () => {}
+    );
+    this.goodsListService.loadSpecificPage(pcType, 1).map(data => data[1]).subscribe(
+      () => {}
+    );
   }
 }

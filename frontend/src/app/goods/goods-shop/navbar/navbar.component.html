@@ -10,7 +10,7 @@
           <span class="icon-bar"></span>
         </button>
         <!-- pcType -->
-        <a href="" class="navbar-brand"> 컴퓨터</a>
+        <a [routerLink]="['/goods/list', 'All', 1]" class="navbar-brand" (click)="typeChange('All')"> 전체 컴퓨터</a>
       </div>
       <div class="collapse navbar-collapse navbar-topmenu-collapse">
         <ul class="nav navbar-nav">

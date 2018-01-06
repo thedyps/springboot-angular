@@ -29,11 +29,18 @@ export class ListComponent implements OnInit {
     );
     this.goodsList$ = this.goodsListService.goodsList$;
     this.pcListPageNum$ = this.goodsListService.pcListPageNum$;
-    this.goodsListService.loadFirstPage(this.pcType).map(data => data[0]).subscribe();
-    this.goodsListService.loadFirstPage(this.pcType).map(data => data[1]).subscribe();
+    this.goodsListService.loadFirstPage(this.pcType).map(data => data[0]).subscribe(
+      () => {}
+    );
+    this.goodsListService.loadFirstPage(this.pcType).map(data => data[1]).subscribe(
+      () => {}
+    );
   }
 
   pageChange(num: number) {
-    this.goodsListService.loadSpecificPage(this.pcType, num).map(data => data[1]).subscribe();
+    this.goodsListService.loadSpecificPage(this.pcType, num).map(data => data[1]).subscribe(
+      () => {}
+
+    );
   }
 }

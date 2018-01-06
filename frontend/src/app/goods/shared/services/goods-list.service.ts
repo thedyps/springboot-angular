@@ -36,6 +36,7 @@ export class GoodsListService {
   private static readonly PAGE_SIZE = 10;
   filterData: FilterData = UNKNOWN_SEARCH_DATA;
   pcCount: number;
+  pageCount: number;
 
   private filterDataSubject = new BehaviorSubject<FilterData>(UNKNOWN_SEARCH_DATA);
   filterData$: Observable<FilterData> = this.filterDataSubject.asObservable();
@@ -57,6 +58,8 @@ export class GoodsListService {
       .subscribe(data => this.filterData = data);
     this.goodsCount$
       .subscribe(count => this.pcCount = count);
+    this.pcListPageNum$
+      .subscribe( num => this.pageCount = num.pageCount);
   }
 
   setFilterData(filterData: FilterData) {
@@ -71,21 +74,25 @@ export class GoodsListService {
     return this.loadPage(pcType, num);
   }
 
-  nextPage(pcType: string, num: number): Observable<[any, any]>  {
-    let currentPage: number = num;
-    if (currentPage - 1 >= 1) {
-      currentPage -= 1;
-    }
-    return this.loadPage(pcType, currentPage);
-  }
-
   prePage(pcType: string, num: number): Observable<[any, any]>  {
     let currentPage: number = num;
-    currentPage += 1;
-    return this.loadPage(pcType, currentPage);
+    if (currentPage > 1) {
+      currentPage -= 1;
+      return this.loadPage(pcType, currentPage);
+    }
   }
 
-  loadPage(pcType: string, num: number): Observable<[any, any]> {
+  nextPage(pcType: string, num: number): Observable<[any, any]>  {
+    let currentPage: number = num;
+    if(currentPage  < this.pageCount)
+    {
+      currentPage += 1;
+      console.log('현재 페이지 넘버는' + currentPage + '페이지 카운트는' + this.pageCount);
+      return this.loadPage(pcType, currentPage);
+    }
+  }
+
+  private loadPage(pcType: string, num: number): Observable<[any, any]> {
     if(this.filterData.searchWord.length !== 0 ||
       this.filterData.sortWord !== '-1' ||
       this.filterData.filterPcBrand.length !== 0 ||
@@ -154,6 +161,7 @@ export class GoodsListService {
 
   getSearchCount(pcType: string, pcSearchData:PcSearchData): Observable<any> {
     return this._http.patch<number>('/api/goods/list/' + pcType + "/searchCount", pcSearchData)
+      .first()
       .do(count => this.goodsCountSubject.next(count))
       .publishLast().refCount();
 
@@ -161,8 +169,8 @@ export class GoodsListService {
 
   getSearchList(pcType: string, num: number, pcSearchData:PcSearchData): Observable<any> {
     return this._http.patch<PcList[]>('/api/goods/list/' + pcType + '/show/' + num + "/searchList", pcSearchData)
+      .first()
       .do(list => this.goodsListSubject.next(list))
       .publishLast().refCount();
   }
-
 }
