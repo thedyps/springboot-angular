@@ -1,0 +1,23 @@
+@charset "UTF-8";
+[class*="col-md-"].top-14,
+[class*="col-lg-"].top-14
+{  }
+@media (max-width : 1200px) {
+  [class*="col-sm-"].top-14,
+  [class*="col-xs-"].top-14
+  {  margin-top: 14px;  }
+}
+
+@media  (max-width : 992px) {
+  [class*="col-sm-"].top-14 ,
+  [class*="col-xs-"].top-14
+  {  margin-top: 14px;  }
+}
+
+.brandImg {
+  display: block;
+}
+
+.row {
+  height: 100%;
+}

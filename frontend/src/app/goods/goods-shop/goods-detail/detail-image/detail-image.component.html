@@ -1,0 +1,26 @@
+<div id="DetailImgSlide" class="carousel slide" data-ride="carousel" data-interval="false" *ngIf="goodsDetailImg$ | async as pcDetailImg">
+  <div class="row vertical-align">
+    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-5">
+      <ul class="list-group">
+        <li data-target="#DetailImgSlide" data-slide-to="0" class="list-group-item">
+          <img [src]="'assets/images/'+pcDetailImg.thumbnailImg[0]" alt="" class="center-block">
+        </li>
+        <li data-target="#DetailImgSlide" *ngFor="let img of pcDetailImg.thumbnailImg | slice:1; let i = index "
+            class="list-group-item" [attr.data-slide-to]="i+1">
+          <img [src]="'assets/images/'+img" alt="" class="center-block">
+        </li>
+      </ul>
+    </div>
+    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-7">
+      <!-- Wrapper for slides -->
+      <div class="carousel-inner">
+        <div class="item active">
+          <img [src]="'assets/images/'+pcDetailImg.pcImg[0]" alt="상세 이미지" class="img-responsive">
+        </div>
+        <div class="item" *ngFor="let img of pcDetailImg.pcImg | slice:1;" [attr.data-index]="i">
+          <img [src]="'assets/images/'+img" alt="상세 이미지" class="img-responsive">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

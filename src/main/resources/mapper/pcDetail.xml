@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="xyz.thedyps.springbootangular.goods.PcDetailDAO">
+	<select id="getPcSummary" resultType="xyz.thedyps.springbootangular.goods.goodsVO.PcSummaryVO">
+	SELECT 
+		P.code pc_code, P.brand pc_brand, P.type pc_type, 
+		P.price pc_price, P.deliveryPrice pc_deliprice, P.grade pc_grade, 
+		P.stock pc_stock, C.name cpu_name, C.kind cpu_kind, C.speed cpu_speed, 
+		R.speed ram_speed, 
+		M.ramlimit mainboard_ramlimit, 
+		H.space hdd_space, H.speed hdd_speed, 
+		S.space ssd_space, S.speed ssd_speed, 
+		G.kind graphic_kind, O.name os_name
+	FROM PC p 
+		JOIN CPU c ON P.cpu = C.code 
+		JOIN RAM r ON P.ram = R.code 
+		JOIN MAINBOARD m ON P.mainboard = M.code 
+		LEFT OUTER JOIN HDD h ON P.hdd = H.code 
+		LEFT OUTER JOIN SSD s ON P.ssd = S.code 
+		JOIN GRAPHIC g ON P.graphic = G.code 
+		JOIN OS o ON P.os = o.code 
+	WHERE P.code = #{pcCode}
+	</select>
+	
+		
+	<select id="getPcDetail" resultType="xyz.thedyps.springbootangular.goods.goodsVO.PcDetailVO">
+	SELECT
+		P.code pc_code, P.brand pc_brand, P.type pc_type,
+		C.brand cpu_brand, C.name cpu_name, C.speed cpu_speed, C.type cpu_type, C.kind cpu_kind, 
+		R.brand ram_brand, R.name ram_name, R.space ram_space, R.speed ram_speed, 
+		G.brand graphic_brand, G.name graphic_name, G.kind graphic_kind, 
+		H.brand hdd_brand, H.name hdd_name, H.space hdd_space, H.speed hdd_speed, 
+		S.brand ssd_brand, S.name ssd_name, S.space ssd_space, S.speed ssd_speed, 
+		M.brand mainboard_brand, M.name mainboard_name, M.ramslot mainboard_ramslot, M.ramLimit mainboard_ramlimit, 
+		o.name osName 
+	FROM PC p 
+		JOIN CPU c ON P.cpu = C.code 
+		JOIN RAM r ON P.ram = R.code 
+		JOIN MAINBOARD m ON P.mainboard = M.code 
+		LEFT OUTER JOIN HDD h ON P.hdd = H.code 
+		LEFT OUTER JOIN SSD s ON P.ssd = S.code 
+		JOIN GRAPHIC g ON P.graphic = G.code 
+		JOIN OS o ON P.os = o.code 
+	WHERE P.code = #{pcCode}
+	</select>
+		
+	<select id="getPcImgCount" resultType="int">
+	SELECT count(*) FROM PCIMAGE WHERE pcCode = #{pcCode} AND imgOrder>2
+	</select>
+	
+	<select id="getBrandImg" resultType="String">
+	SELECT imgPath brandImg FROM PCIMAGE WHERE pcCode = #{pcCode, javaType=String} AND imgOrder=1 ORDER BY imgOrder
+	</select>
+	
+	<select id="getPcImg" resultType="String" parameterType="map">
+	<![CDATA[
+	SELECT imgPath pcImg FROM PCIMAGE WHERE pcCode = #{pcCode, javaType=String} AND imgOrder>2 AND imgOrder<=#{index, javaType=int, jdbcType=NUMERIC} ORDER BY imgOrder
+	]]>
+	</select>
+	
+	<select id="getThumbnailImg" resultType="String" parameterType="map">
+	<![CDATA[
+	SELECT imgPath thumbnailImg FROM PCIMAGE WHERE pcCode = #{pcCode, javaType=String} AND imgOrder>#{index, javaType=int, jdbcType=NUMERIC} ORDER BY imgOrder
+	]]>
+	</select>
+</mapper>

@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="xyz.thedyps.springbootangular.goods.PcListDAO" >
+ 	<select id="getPcListCount" resultType="int" parameterType="map">
+	SELECT 
+		count(*) 
+	FROM PC P 
+		JOIN CPU C ON P.cpu = C.code 
+		JOIN RAM R ON P.ram = R.code 
+		JOIN MAINBOARD M ON P.mainboard = M.code 
+		LEFT OUTER JOIN HDD H ON P.hdd = H.code 
+		LEFT OUTER JOIN SSD S ON P.ssd = S.code 
+		JOIN GRAPHIC G ON P.graphic = G.code 
+		JOIN OS O ON P.os = O.code
+  	<if	test="pcType != 'All'">
+	WHERE P.type = #{pcType, javaType=String, jdbcType=VARCHAR}
+	</if>
+ 	</select>
+
+	<select id="getPcListImg" resultType="xyz.thedyps.springbootangular.goods.goodsVO.PcListImgVO">
+		SELECT
+		*
+		FROM (
+		SELECT
+		imgPath c, imgOrder v
+		FROM PCIMAGE
+		WHERE pcCode = #{pcCode}
+		)
+		PIVOT (MIN(c) FOR v IN (2 brandImg, 3 mainImg))
+	</select>
+
+	<select id="getPcList" parameterType="map" resultMap="pcList">
+		SELECT * FROM (
+		SELECT ROWNUM rnum, result.* FROM (
+		SELECT P.code pc_code, P.brand pc_brand, P.type pc_type,
+		P.price pc_price, P.DELIVERYPRICE pc_deliprice, P.grade pc_grade,
+		C.name cpu_name, C.kind cpu_kind, C.speed cpu_speed,
+		R.speed ram_speed,
+		M.ramlimit mainboard_ramlimit,
+		H.space hdd_space, H.speed hdd_speed,
+		S.space ssd_space, S.speed ssd_speed,
+		G.kind graphic_kind, O.name os_name
+		FROM PC P
+		JOIN CPU C ON P.cpu = C.code
+		JOIN RAM R ON P.ram = R.code
+		JOIN MAINBOARD M ON P.mainboard = M.code
+		LEFT OUTER JOIN HDD H ON P.hdd = H.code
+		LEFT OUTER JOIN SSD S ON P.ssd = S.code
+		JOIN GRAPHIC G ON P.graphic = G.code
+		JOIN OS O ON P.os = O.code
+		<if test="pcType != 'All'">
+		WHERE P.type = #{pcType, javaType=String, jdbcType=VARCHAR}
+		</if>
+		) result
+		) WHERE rnum BETWEEN #{start, javaType=int, jdbcType=NUMERIC} AND #{end, javaType=int, jdbcType=NUMERIC}
+	</select>
+
+	<resultMap type="xyz.thedyps.springbootangular.goods.goodsVO.PcListVO" id="pcList">
+		<association property="pcListImg" javaType="xyz.thedyps.springbootangular.goods.goodsVO.PcListImgVO" column="{pcCode=pc_code}" select="getPcListImg"/>
+	</resultMap>
+
+	<select id="getSearchPcCount" parameterType="xyz.thedyps.springbootangular.goods.goodsVO.PcSearchParamVO" resultType="int">
+		SELECT
+		count(*)
+		FROM PC P
+		JOIN CPU C ON P.cpu = C.code
+		JOIN RAM R ON P.ram = R.code
+		JOIN MAINBOARD M ON P.mainboard = M.code
+		LEFT OUTER JOIN HDD H ON P.hdd = H.code
+		LEFT OUTER JOIN SSD S ON P.ssd = S.code
+		JOIN GRAPHIC G ON P.graphic = G.code
+		JOIN OS O ON P.os = O.code
+		<if	test="pcType != 'All'">
+		WHERE P.type = #{pcType, javaType=String, jdbcType=VARCHAR}
+		</if>
+		<if test="searchWord != null and searchWord != ''" >
+			AND (
+			P.brand LIKE '%' || #{searchWord} || '%'
+			OR C.name LIKE '%' || #{searchWord} || '%'
+			OR C.brand LIKE '%' || #{searchWord} || '%'
+			OR R.name LIKE '%' || #{searchWord} || '%'
+			OR R.brand LIKE '%' || #{searchWord} || '%'
+			OR M.name LIKE '%' || #{searchWord} ||'%'
+			OR M.brand LIKE '%' || #{searchWord} ||'%'
+			OR H.name LIKE '%' || #{searchWord} ||'%'
+			OR H.brand LIKE '%' || #{searchWord} ||'%'
+			OR S.name LIKE '%' || #{searchWord} || '%'
+			OR S.brand LIKE '%' || #{searchWord} || '%'
+			OR G.name LIKE '%' || #{searchWord} || '%'
+			OR G.brand LIKE '%' || #{searchWord} || '%'
+			OR O.name LIKE '%' || #{searchWord} || '%'
+			)
+		</if>
+
+		<if test="filterPcBrand.size > 0">
+			AND
+			P.brand IN (<foreach collection="filterPcBrand" item="a" separator=",">#{a}</foreach>)
+		</if>
+
+		<if test="filterCpuKind.size > 0">
+			AND
+			C.kind IN (<foreach collection="filterCpuKind" item="b" separator=",">#{b}</foreach>)
+		</if>
+
+		<if test="filterRamSpace.size > 0">
+			AND
+			M.ramlimit IN (<foreach collection="filterRamSpace" item="c" separator=",">#{c}</foreach>)
+		</if>
+
+		<if test="filterGraKind.size > 0">
+			AND
+			G.kind IN (<foreach collection="filterGraKind" item="d" separator=",">#{d}</foreach>)
+		</if>
+
+		<if test="filterOsName.size > 0">
+			AND
+			O.name IN (<foreach collection="filterOsName" item="e" separator=",">#{e}</foreach>)
+		</if>
+	</select>
+
+	<select id="getSearchPcList" parameterType="xyz.thedyps.springbootangular.goods.goodsVO.PcSearchParamVO" resultMap="pcSearchList">
+		SELECT * FROM (
+		SELECT ROWNUM rnum, result.* FROM (
+		SELECT P.code pc_code, P.brand pc_brand, P.type pc_type,
+		P.price pc_price, P.DELIVERYPRICE pc_deliprice, P.grade pc_grade,
+		C.name cpu_name, C.kind cpu_kind, C.speed cpu_speed,
+		R.speed ram_speed,
+		M.ramlimit mainboard_ramlimit,
+		H.space hdd_space, H.speed hdd_speed,
+		S.space ssd_space, S.speed ssd_speed,
+		G.kind graphic_kind, O.name os_name
+		FROM PC P
+		JOIN CPU C ON P.cpu = C.code
+		JOIN RAM R ON P.ram = R.code
+		JOIN MAINBOARD M ON P.mainboard = M.code
+		LEFT OUTER JOIN HDD H ON P.hdd = H.code
+		LEFT OUTER JOIN SSD S ON P.ssd = S.code
+		JOIN GRAPHIC G ON P.graphic = G.code
+		JOIN OS O ON P.os = O.code
+		<if test="pcType != 'All'">
+		WHERE P.type = #{pcType, javaType=String, jdbcType=VARCHAR}
+		</if>
+		<if test="searchWord != null and searchWord != ''" >
+		AND (
+			P.brand LIKE '%' || #{searchWord} || '%'
+			OR C.name LIKE '%' || #{searchWord} || '%'
+			OR C.brand LIKE '%' || #{searchWord} || '%'
+			OR R.name LIKE '%' || #{searchWord} || '%'
+			OR R.brand LIKE '%' || #{searchWord} || '%'
+			OR M.name LIKE '%' || #{searchWord} ||'%'
+			OR M.brand LIKE '%' || #{searchWord} ||'%'
+			OR H.name LIKE '%' || #{searchWord} ||'%'
+			OR H.brand LIKE '%' || #{searchWord} ||'%'
+			OR S.name LIKE '%' || #{searchWord} || '%'
+			OR S.brand LIKE '%' || #{searchWord} || '%'
+			OR G.name LIKE '%' || #{searchWord} || '%'
+			OR G.brand LIKE '%' || #{searchWord} || '%'
+			OR O.name LIKE '%' || #{searchWord} || '%'
+			)
+		</if>
+
+		<if test="filterPcBrand.size > 0">
+		AND
+		  P.brand IN (<foreach collection="filterPcBrand" item="a" separator=",">#{a}</foreach>)
+		</if>
+
+		<if test="filterCpuKind.size > 0">
+		AND
+		  C.kind IN (<foreach collection="filterCpuKind" item="b" separator=",">#{b}</foreach>)
+		</if>
+
+		<if test="filterRamSpace.size > 0">
+		AND
+		  M.ramlimit IN (<foreach collection="filterRamSpace" item="c" separator=",">#{c}</foreach>)
+		</if>
+
+		<if test="filterGraKind.size > 0">
+		AND
+		  G.kind IN (<foreach collection="filterGraKind" item="d" separator=",">#{d}</foreach>)
+		</if>
+
+		<if test="filterOsName.size > 0">
+		AND
+		  O.name IN (<foreach collection="filterOsName" item="e" separator=",">#{e}</foreach>)
+		</if>
+
+		) result
+		) WHERE rnum BETWEEN #{start, javaType=int, jdbcType=NUMERIC} AND #{end, javaType=int, jdbcType=NUMERIC}
+	</select>
+
+	<resultMap type="xyz.thedyps.springbootangular.goods.goodsVO.PcListVO" id="pcSearchList">
+		<association property="pcListImg" javaType="xyz.thedyps.springbootangular.goods.goodsVO.PcListImgVO" column="{pcCode=pc_code}" select="getPcListImg"/>
+	</resultMap>
+</mapper>

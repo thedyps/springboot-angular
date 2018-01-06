@@ -1,0 +1,15 @@
+spring:
+  datasource:
+    type: org.apache.tomcat.jdbc.pool.DataSource
+    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+    url: jdbc:log4jdbc:oracle:thin:@jsdt04.cbhhznrharey.ap-northeast-2.rds.amazonaws.com:1521:ORCL
+    username: incjsdt04
+    password: increpasjsdt04
+    connectionProperties: useUnicode=true&characterEncoding=utf8
+
+mybatis:
+  configuration:
+    auto-mapping-behavior: full
+    map-underscore-to-camel-case: true
+  type-aliases-package: xyz.thedyps.springbootangular.goods, xyz.thedyps.springbootangular.member
+  mapper-locations: classpath:mapper/**/*.xml

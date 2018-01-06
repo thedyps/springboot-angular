@@ -1,0 +1,15 @@
+<div class="container-fluid">
+  <app-image-gallery></app-image-gallery>
+  <div [ngClass]="{'row': true, 'row-offcanvas': true, 'row-offcanvas-right': true
+    , 'active': active}">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-danger">
+      <button type="button" class="pull-left btn btn-primary btn-lg visible-xs" (click)="toggleSide()">
+        <span class="glyphicon glyphicon-align-justify" aria-hidden="true"> 상품검색</span>
+      </button>
+    </div>
+    <div class="col-lg-2 col-md-3 col-sm-3 col-xs-0 panel-group sidebar-offcanvas" id="sidebar" role="tablist">
+      <app-sidebar></app-sidebar>
+    </div>
+    <app-list></app-list>
+  </div>
+</div>

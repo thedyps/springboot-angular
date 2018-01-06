@@ -1,0 +1,416 @@
+<div class="container-fluid">
+  <div class="row" *ngIf="goodsSummary$ | async as pcSummary">
+    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+      <app-detail-image></app-detail-image>
+    </div>
+    <div class="col-lg-7 col-md-6 col-sm-6 col-xs-12" *ngIf="goodsDetailImg$ | async as pcDetailImg">
+      <img [src]="'assets/images/'+pcDetailImg.brandImg" alt="브랜드 이미지" class="brandImg"/>
+      <h2>
+        <span *ngIf="!pcSummary.ssdSpace">
+          {{pcSummary.pcBrand}} 데스크탑 컴퓨터 {{pcSummary.cpuKind}} ({{pcSummary.cpuSpeed}}) {{pcSummary.hddSpace}} HDD {{pcSummary.graphicKind}} {{pcSummary.osName}}
+        </span>
+        <span *ngIf="!pcSummary.hddSpace">
+          {{pcSummary.pcBrand}} 데스크탑 컴퓨터 {{pcSummary.cpuKind}} ({{pcSummary.cpuSpeed}}) {{pcSummary.ssdSpace}} SSD {{pcSummary.graphicKind}} {{pcSummary.osName}}
+        </span>
+        <span *ngIf="pcSummary.hddSpace && pcSummary.ssdSpace">
+          {{pcSummary.pcBrand}} 데스크탑 컴퓨터 {{pcSummary.cpuKind}} ({{pcSummary.cpuSpeed}})
+          {{pcSummary.hddSpace}} HDD {{pcSummary.ssdSpace}} SSD {{pcSummary.graphicKind}} {{pcSummary.osName}}
+        </span>
+      </h2>
+      <ul class="list-unstyled">
+        <li>
+          <strong>등급 :</strong>
+          <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+        </li>
+        <li>
+          <strong>재고:</strong> {{pcSummary.pcStock}}
+        </li>
+        <li>
+          <strong>CPU: </strong> {{pcSummary.cpuKind}} {{pcSummary.cpuName}} ({{pcSummary.cpuSpeed}}
+        </li>
+        <li>
+          <strong>메모리: </strong> {{pcSummary.mainBoardRamLimit}} {{pcSummary.ramSpeed}}
+        </li>
+        <li *ngIf="!pcSummary.ssdSpace">
+          <strong>저장장치: </strong> {{pcSummary.hddSpace}} HDD
+        </li>
+        <li *ngIf="!pcSummary.hddSpace">
+          <strong>저장장치: </strong> {{pcSummary.ssdSpace}} SSD"
+        </li>
+        <li *ngIf="pcSummary.hddSpace && pcSummary.ssdSpace">
+          <strong>저장장치: </strong> {{pcSummary.hddSpace}} HDD
+        </li>
+        <li *ngIf="pcSummary.hddSpace && pcSummary.ssdSpace">
+          <strong>저장장치: </strong> {{pcSummary.ssdSpace}} SSD
+        </li>
+        <li>
+          <strong>그래픽 카드: </strong>
+          {{pcSummary.graphicKind}}
+        </li>
+        <li>
+          <strong>용도: </strong>{{pcSummary.pcType}}
+        </li>
+      </ul>
+    </div>
+    <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+      <ul class="list-unstyled">
+        <li>
+          <strong>가격</strong> {{pcSummary.pcPrice | currency:'KRW' }}원
+        </li>
+        <li>
+          <strong>예상 배송일: </strong> {{pcSummary.deliveryDate}}
+        </li>
+      </ul>
+      <div>
+        <form class="form-horizontal">
+          <div class="form-group">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+              <div class="input-group">
+							<span class="input-group-btn">
+								<button type="button" class="btn btn-primary btn-number" disabled="disabled" data-type="minus" data-field="quant[1]">
+									<span class="glyphicon glyphicon-minus"></span>
+								</button>
+							</span>
+                <input type="text" name="quant[1]" class="form-control input-number" value="1" min="1">
+                <span class="input-group-btn">
+								<button type="button" class="btn btn-primary btn-number" data-type="plus" data-field="quant[1]">
+									<span class="glyphicon glyphicon-plus"></span>
+								</button>
+							</span>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+              <button type="submit" class="btn btn-success btn-block">장바구니에 담기</button>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+              <button type="submit" class="btn btn-danger btn-lg btn-block">주문하기</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="container" *ngIf="goodsDetail$ | async as pcDetail">
+    <!--
+        <div class="wing-banner">
+            <div class="wing-wrap">
+                <div class="wing-title">
+                    <span class="wing-title-text">최근 본 상품</span>
+                </div>
+                <div class="wing-recently-view">
+                    <ul class="wing-recently-view-list">
+                        <li class="wing-recently-prd"><img src="ShopImages/pcSummary?.thump-1.jpg"></li>
+                        <li class="wing-recently-prd"><img src="ShopImages/pcSummary?.thump-1.jpg"></li>
+                        <li class="wing-recently-prd"><img src="ShopImages/pcSummary?.thump-1.jpg"></li>
+                        <li class="wing-recently-prd"><img src="ShopImages/pcSummary?.thump-1.jpg"></li>
+                        <li class="wing-recently-prd"><img src="ShopImages/pcSummary?.thump-1.jpg"></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+         -->
+    <div>
+      <table class="table table-striped">
+        <thead>
+        <tr>
+          <th colspan="2">싱품 모델 정보</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- 브랜드명 -->
+        <tr>
+          <th>브랜드명</th>
+          <td>{{pcDetail.pcBrand}}</td>
+        </tr>
+        <!-- 코드명 -->
+        <tr>
+          <th>코드명</th>
+          <td>{{pcDetail.pcCode}}</td>
+        </tr>
+        <tr>
+          <th>용도</th>
+          <td>{{pcDetail.pcType}}</td>
+        </tr>
+        </tbody>
+      </table>
+      <table class="table table-striped">
+        <thead>
+        <tr>
+          <th colspan="2">상품 상세 정보</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <th>CPU 이름</th>
+          <td>{{pcDetail.cpuName}}</td>
+        </tr>
+        <tr>
+          <th>CPU 타입</th>
+          <td>{{pcDetail.cpuType}}</td>
+        </tr>
+        <tr>
+          <th>메모리 용량</th>
+          <td>{{pcDetail.mainBoardRamLimit}}</td>
+        </tr>
+        <tr>
+          <th>메모리 속도</th>
+          <td>{{pcDetail.ramSpeed}}</td>
+        </tr>
+        <tr *ngIf="!pcDetail.ssdSpace">
+          <th>HDD 용량</th>
+          <td>{{pcDetail.hddSpace}}</td>
+        </tr>
+        <tr *ngIf="!pcDetail.ssdSpace">
+          <th>HDD 속도</th>
+          <td>{{pcDetail.hddSpeed}}</td>
+        </tr>
+        <tr *ngIf="!pcDetail.hddSpace">
+          <th>SSD 용량</th>
+          <td>{{pcDetail.ssdSpace}}</td>
+        </tr>
+        <tr *ngIf="!pcDetail.hddSpace">
+          <th>SSD 속도</th>
+          <td>{{pcDetail.ssdSpeed}}</td>
+        </tr>
+        <tr *ngIf="pcDetail.hddSpace && pcDetail.ssdSpace">
+          <th>HDD 용량</th>
+          <td>{{pcDetail.hddSpace}}</td>
+        </tr>
+        <tr *ngIf="pcDetail.hddSpace && pcDetail.ssdSpace">
+          <th>HDD 속도</th>
+          <td>{{pcDetail.hddSpeed}}</td>
+        </tr>
+        <tr *ngIf="pcDetail.hddSpace && pcDetail.ssdSpace">
+          <th>SSD 용량</th>
+          <td>{{pcDetail.ssdSpace}}</td>
+        </tr>
+        <tr *ngIf="pcDetail.hddSpace && pcDetail.ssdSpace">
+          <th>SSD 속도</th>
+          <td>{{pcDetail.ssdSpeed}}</td>
+        </tr>
+        <tr>
+          <th>운영체제 이름</th>
+          <td>{{pcDetail.osName}}</td>
+        </tr>
+        </tbody>
+      </table>
+      <table class="table table-striped">
+        <thead>
+        <tr>
+          <th colspan="2">CPU 정보</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <th>브랜드</th>
+          <td>{{pcDetail.pcBrand}}</td>
+        </tr>
+        <tr>
+          <th>이름</th>
+          <td>{{pcDetail.cpuName}}</td>
+        </tr>
+        <tr>
+          <th>속도</th>
+          <td>{{pcDetail.cpuSpeed}}</td>
+        </tr>
+        <tr>
+          <th>타입</th>
+          <td>{{pcDetail.cpuType}}</td>
+        </tr>
+        <tr>
+          <th>종류</th>
+          <td>{{pcDetail.cpuKind}}</td>
+        </tr>
+        </tbody>
+      </table>
+      <table class="table table-striped">
+        <thead>
+        <tr>
+          <th colspan="2">메모리 정보</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <th>브랜드</th>
+          <td>{{pcDetail.ramBrand}}</td>
+        </tr>
+        <tr>
+          <th>이름</th>
+          <td>{{pcDetail.ramName}}</td>
+        </tr>
+        <tr>
+          <th>용량</th>
+          <td>{{pcDetail.mainBoardRamLimit}}</td>
+        </tr>
+        <tr>
+          <th>속도</th>
+          <td>{{pcDetail.ramSpeed}}</td>
+        </tr>
+        </tbody>
+      </table>
+      <table class="table table-striped">
+        <thead>
+        <tr>
+          <th colspan="2">그래픽 카드 정보</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <th>브랜드</th>
+          <td>{{pcDetail.graphicBrand}}</td>
+        </tr>
+        <tr>
+          <th>이름</th>
+          <td>{{pcDetail.graphicName}}</td>
+        </tr>
+        <tr>
+          <th>종류</th>
+          <td>{{pcDetail.graphicKind}}</td>
+        </tr>
+        </tbody>
+      </table>
+      <table class="table table-striped" *ngIf="!pcDetail.ssdSpace">
+        <thead>
+        <tr>
+          <th colspan="2">HDD 정보</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <th>브랜드</th>
+          <td>{{pcDetail.hddBrand}}</td>
+        </tr>
+        <tr>
+          <th>이름</th>
+          <td>{{pcDetail.hddName}}</td>
+        </tr>
+        <tr>
+          <th>용량</th>
+          <td>{{pcDetail.hddSpace}}</td>
+        </tr>
+        <tr>
+          <th>속도</th>
+          <td>{{pcDetail.hddSpeed}}</td>
+        </tr>
+        </tbody>
+      </table>
+      <table class="table table-striped" *ngIf="!pcDetail.hddSpace">
+        <thead>
+        <tr>
+          <th colspan="2">SSD 정보</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <th>브랜드</th>
+          <td>{{pcDetail.ssdBrand}}</td>
+        </tr>
+        <tr>
+          <th>이름</th>
+          <td>{{pcDetail.ssdName}}</td>
+        </tr>
+        <tr>
+          <th>용량</th>
+          <td>{{pcDetail.ssdSpace}}</td>
+        </tr>
+        <tr>
+          <th>속도</th>
+          <td>{{pcDetail.ssdSpeed}}</td>
+        </tr>
+        </tbody>
+      </table>
+      <table class="table table-striped" *ngIf="pcDetail.hddSpace && pcDetail.ssdSpace">
+        <thead>
+        <tr>
+          <th colspan="2">HDD 정보</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <th>브랜드</th>
+          <td>{{pcDetail.hddBrand}}</td>
+        </tr>
+        <tr>
+          <th>이름</th>
+          <td>{{pcDetail.hddName}}</td>
+        </tr>
+        <tr>
+          <th>용량</th>
+          <td>{{pcDetail.hddSpace}}</td>
+        </tr>
+        <tr>
+          <th>속도</th>
+          <td>{{pcDetail.hddSpeed}}</td>
+        </tr>
+        </tbody>
+      </table>
+      <table class="table table-striped" *ngIf="pcDetail.hddSpace && pcDetail.ssdSpace">
+        <thead>
+        <tr>
+          <th colspan="2">SSD 정보</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <th>브랜드</th>
+          <td>{{pcDetail.ssdBrand}}</td>
+        </tr>
+        <tr>
+          <th>이름</th>
+          <td>{{pcDetail.ssdName}}</td>
+        </tr>
+        <tr>
+          <th>용량</th>
+          <td>{{pcDetail.ssdSpace}}</td>
+        </tr>
+        <tr>
+          <th>속도</th>
+          <td>{{pcDetail.ssdSpeed}}</td>
+        </tr>
+        </tbody>
+      </table>
+      <table class="table table-striped">
+        <thead>
+        <tr>
+          <th colspan="2">메인보드 정보</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <th>브랜드</th>
+          <td>{{pcDetail.mainBoardBrand}}</td>
+        </tr>
+        <tr>
+          <th>이름</th>
+          <td>{{pcDetail.mainBoardName}}</td>
+        </tr>
+        <tr>
+          <th>램 슬롯</th>
+          <td>{{pcDetail.mainBoardRamSlot}}개</td>
+        </tr>
+        <tr>
+          <th>최대 메모리</th>
+          <td>{{pcDetail.mainBoardRamLimit}}</td>
+        </tr>
+        </tbody>
+      </table>
+      <table class="table table-striped">
+        <thead>
+        <tr>
+          <th colspan="2">운영체제 정보</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <th>이름</th>
+          <td>{{pcDetail.osName}}</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

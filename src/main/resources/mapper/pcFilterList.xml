@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="xyz.thedyps.springbootangular.goods.PcFilterListDAO" >
+	<select id="getFilterPcBrand" resultType="String">
+		SELECT DISTINCT brand FROM PC
+	</select>
+
+	<select id="getFilterCpuKind" resultType="String">
+		SELECT DISTINCT kind FROM CPU
+	</select>
+
+	<select id="getFilterRamSpace" resultType="String">
+		SELECT DISTINCT ramLimit FROM MAINBOARD
+	</select>
+
+	<select id="getFilterGraKind" resultType="String">
+		SELECT DISTINCT kind FROM GRAPHIC
+	</select>
+
+	<select id="getFilterOsName" resultType="String">
+		SELECT DISTINCT name FROM OS
+	</select>
+</mapper>

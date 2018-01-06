@@ -1,0 +1,13 @@
+@charset "UTF-8";
+#title {
+  font-family: 'Demonized';
+}
+.login-success {
+  display: inline-block;
+  font-size: 100%;
+}
+.vcenter {
+  display: inline-block;
+  vertical-align: middle;
+  float: none;
+}

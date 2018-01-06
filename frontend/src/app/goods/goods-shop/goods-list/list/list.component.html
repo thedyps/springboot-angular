@@ -1,0 +1,92 @@
+<div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+  <ul class="list-group">
+    <!-- 한 개의  PC 열기-->
+    <li class="list-group-item" *ngFor="let pc of goodsList$ | async">
+      <div class="row">
+        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+          <div></div>
+          <div>
+            <a href="pcDetail.jsp?code={{pc.pcCode}}">
+              <img [src]="'assets/images/'+pc.pcListImg.mainImg" class="img-responsive center-block">
+            </a>
+          </div>
+          <div></div>
+        </div>
+        <div class="col-lg-6 col-md-8 col-sm-8 col-xs-12">
+          <div>
+            <a href="pcDetail.jsp?code={{pc.pcCode}}">
+              <img [src]="'assets/images/'+pc.pcListImg.brandImg">
+            </a>
+          </div>
+          <h2>
+            <a [routerLink]="['/goods/detail', pc.pcCode]">
+                    <span *ngIf="!pc.ssdSpace">
+                        {{pc.pcBrand }} 데스크탑 컴퓨터 {{pc.cpuKind}} ({{pc.cpuKind}}) {{pc.hddSpace}} HDD {{pc.graphicKind}} {{pc.osName}}
+                    </span>
+              <span *ngIf="!pc.hddSpace">
+                      {{pc.pcBrand}} 데스크탑 컴퓨터 {{pc.cpuKind}} ({{pc.cpuSpeed}}) {{pc.ssdSpace}} SSD {{pc.graphicKind}} {{pc.osName}}
+                    </span>
+              <span *ngIf="pc.hddSpace && pc.ssdSpace">
+                      {{pc.pcBrand}} 데스크탑 컴퓨터 {{pc.cpuKind}} ({{pc.cpuSpeed}}) {{pc.hddSpace}} HDD  {{pc.ssdSpace}} SSD {{pc.graphicKind}} {{pc.osName}}
+                    </span>
+            </a>
+          </h2>
+        </div>
+        <div class="col-lg-3 col-md-12 col-sm-8 col-xs-12">
+          <div>
+            <div>
+              <a href="pcDetail.jsp?code={{pc.pcCode}}">
+                <span><strong>{{pc.pcPrice|currency:'KRW'}}</strong></span>
+              </a>
+            </div>
+            <div>
+              <span>예상 배송일: {{pc.deliveryDate}}</span>
+            </div>
+            <div>
+              <span *ngIf="pc.pcDeliveryPrice > 0">배송료 : {{pc.pcDeliveryPrice|currency:'KRW'}}원</span>
+              <span *ngIf="pc.pcDeliveryPrice <= 0">배송료 : 무료 배송</span>
+            </div>
+          </div>
+          <div>
+            <strong>등급:</strong>
+            <ul>
+              <li><strong>CPU: </strong>{{pc.cpuKind}} {{pc.cpuName}} {{pc.cpuSpeed}}</li>
+              <li><strong>메모리: </strong>{{pc.mainBoardRamLimit}} {{pc.ramSpeed}}</li>
+              <li *ngIf="!pc.ssdSpace"><strong>저장장치: </strong>{{pc.hddSpace}} HDD</li>
+              <li *ngIf="!pc.hddSpace"><strong>저장장치: </strong>{{pc.ssdSpace}}</li>
+              <li *ngIf="pc.hddSpace && pc.ssdSpace"><strong>저장장치: </strong>{{pc.hddSpace}} HDD</li>
+              <li *ngIf="pc.hddSpace && pc.ssdSpace"><strong>저장장치: </strong>{{pc.ssdSpace}} SSD</li>
+              <li><strong>그래픽 카드: </strong>{{pc.graphicKind}}</li>
+              <li><strong>용도: </strong>{{pc.pcType}}</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </li>
+  </ul>
+  <div>
+    <div class="btn-toolbar" role="toolbar" *ngIf="pcListPageNum$ | async as pcListPageNum">
+      <h1>
+        테스팅
+      </h1>
+      <div class="btn-group" role="group">
+        <button type="button" class="btn btn-default" *ngIf="pcListPageNum.startPage > 10"
+                [routerLink]="['/goods/list', pcType, pcListPageNum.startPage-10]"
+                (click)="pageChange(pcListPageNum.startPage-10)">이전
+        </button>
+      </div>
+      <div class="btn-group" role="group">
+        <button type="button" class="btn btn-default"
+                *ngFor="let num of 1 | forNumber:pcListPageNum.startPage:pcListPageNum.endPage"
+                [routerLink]="['/goods/list', pcType, num]" (click)="pageChange(num)">{{num}}
+        </button>
+      </div>
+      <div class="btn-group" role="group">
+        <button type="button" class="btn btn-default" *ngIf="pcListPageNum.endPage < pcListPageNum.pageCount"
+                [routerLink]="['/goods/list', pcType, pcListPageNum.endPage + 1]"
+                (click)="pageChange(pcListPageNum.endPage + 1)">다음
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
