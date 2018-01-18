@@ -13,7 +13,7 @@ import javax.servlet.Filter;
 import java.nio.charset.Charset;
 
 @Configuration
-public class ConfigurationForEncoding {
+public class EncodingConfig {
 
     @Bean
     public HttpMessageConverter<String> responseBodyConverter() {

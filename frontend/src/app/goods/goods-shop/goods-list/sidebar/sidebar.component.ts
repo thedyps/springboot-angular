@@ -1,14 +1,15 @@
 import {FormArray, FormBuilder, FormControl, FormGroup} from "@angular/forms";
 import {Component, OnInit} from "@angular/core";
 import {Observable} from "rxjs/Observable";
-import {PcFilter} from "../../../shared/model/pc-filter";
 import 'rxjs/add/operator/first';
 import 'rxjs/add/operator/publishLast'
 import 'rxjs/add/operator/first'
-import {GoodsListService} from "../../../shared/services/goods-list.service";
 import {ActivatedRoute, Router} from "@angular/router";
-import {PcListPageNum} from "../../../shared/model/pc-list-page-num";
-import {FilterData} from "../../../shared/model/filter-data";
+import {PcFilter} from "../../../../shared/model/pc-filter";
+import {PcListPageNum} from "../../../../shared/model/pc-list-page-num";
+import {GoodsListService} from "../../../../shared/services/goods-list.service";
+import {FilterData} from "../../../../shared/model/filter-data";
+import {Subject} from "rxjs/Subject";
 
 @Component({
   selector: 'app-sidebar',
@@ -20,6 +21,8 @@ export class SidebarComponent implements OnInit {
   formModel: FormGroup;
   goodsFilter$: Observable<PcFilter>;
   pcListPageNum$: Observable<PcListPageNum>;
+  private btnClick = new Subject<Event>();
+  btnClick$: Observable<Event> = this.btnClick.asObservable();
   pcType: string;
   pageNumber: number;
 
@@ -37,8 +40,8 @@ export class SidebarComponent implements OnInit {
 
   ngOnInit() {
     this.route.params.subscribe(params => {
-      this.pcType = params['pcType'];
-      this.pageNumber = parseInt(params['num']);
+        this.pcType = params['pcType'];
+        this.pageNumber = parseInt(params['num']);
       }
     );
     this.createForm();

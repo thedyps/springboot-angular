@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {GoodsListService, UNKNOWN_SEARCH_DATA} from "../../../shared/services/goods-list.service";
-import {ActivatedRoute} from "@angular/router";
+import {GoodsListService, UNKNOWN_SEARCH_DATA} from "../shared/services/goods-list.service";
 
 @Component({
   selector: 'app-navbar',

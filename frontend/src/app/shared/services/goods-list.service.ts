@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import {PcList} from "../model/pc-list";
 import {Observable} from "rxjs/Observable";
 import {HttpClient} from "@angular/common/http";
-import {PcSearchData} from "../model/pc-search-data";
 import {FilterData} from "../model/filter-data";
 import {PcFilter} from "../model/pc-filter";
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
@@ -14,7 +13,7 @@ import 'rxjs/add/operator/filter'
 import 'rxjs/add/operator/switchMap'
 
 
-export const UNKNOWN_SEARCH_DATA: PcSearchData = {
+export const UNKNOWN_SEARCH_DATA: FilterData = {
   searchWord: '',
   sortWord: '-1',
   filterPcBrand: [],
@@ -159,7 +158,7 @@ export class GoodsListService {
 
   }
 
-  getSearchCount(pcType: string, pcSearchData:PcSearchData): Observable<any> {
+  getSearchCount(pcType: string, pcSearchData:FilterData): Observable<any> {
     return this._http.patch<number>('/api/goods/list/' + pcType + "/searchCount", pcSearchData)
       .first()
       .do(count => this.goodsCountSubject.next(count))
@@ -167,7 +166,7 @@ export class GoodsListService {
 
   }
 
-  getSearchList(pcType: string, num: number, pcSearchData:PcSearchData): Observable<any> {
+  getSearchList(pcType: string, num: number, pcSearchData:FilterData): Observable<any> {
     return this._http.patch<PcList[]>('/api/goods/list/' + pcType + '/show/' + num + "/searchList", pcSearchData)
       .first()
       .do(list => this.goodsListSubject.next(list))

@@ -17,6 +17,7 @@ import xyz.thedyps.springbootangular.service.PcDetailService;
 @CrossOrigin
 @RequestMapping(path = "api/goods/detail")
 public class PcDetailController {
+
 	@Autowired
 	private PcDetailService service;
 

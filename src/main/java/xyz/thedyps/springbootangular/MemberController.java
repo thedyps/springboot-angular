@@ -1,27 +1,27 @@
 package xyz.thedyps.springbootangular;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
+import xyz.thedyps.springbootangular.member.memberVO.AuthInfo;
+import xyz.thedyps.springbootangular.member.memberVO.Login;
+import xyz.thedyps.springbootangular.service.MemberService;
 
-        import org.springframework.http.MediaType;
-        import org.springframework.web.bind.annotation.*;
-
-        import java.util.ArrayList;
-        import java.util.List;
-
-/**
- * Created by Damith Ganegoda on 9/3/17.
- */
 @RestController
 @CrossOrigin
-@RequestMapping(path = "/user")
-public class UserController {
+@RequestMapping(path = "api/member")
+public class MemberController {
 
-    private List<User> users = new ArrayList();
+    @Autowired
+    MemberService service;
 
-
-    UserController() {
-        this.users = buildUsers();
+    @RequestMapping(value="/login",method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
+            produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public AuthInfo login(@RequestBody Login body) {
+        return this.service.authenticate(body);
     }
 
+    /*
     @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public List<User> getUsers() {
         return this.users;
@@ -67,33 +67,5 @@ public class UserController {
 
 
     }
-
-    List<User> buildUsers() {
-        List<User> users = new ArrayList<>();
-
-        User user1 = buildUser(1L, "John", "Doe", "john@email.com");
-        User user2 = buildUser(2L, "Jon", "Smith", "smith@email.com");
-        User user3 = buildUser(3L, "Will", "Craig", "will@email.com");
-        User user4 = buildUser(4L, "Sam", "Lernorad", "sam@email.com");
-        User user5 = buildUser(5L, "Ross", "Doe", "ross@email.com");
-
-        users.add(user1);
-        users.add(user2);
-        users.add(user3);
-        users.add(user4);
-        users.add(user5);
-
-        return users;
-
-    }
-
-    User buildUser(Long id, String fname, String lname, String email) {
-        User user = new User();
-        user.setId(id);
-        user.setFirstName(fname);
-        user.setLastName(lname);
-        user.setEmail(email);
-        return user;
-    }
-
+    */
 }

@@ -21,7 +21,7 @@
           <h2>
             <a [routerLink]="['/goods/detail', pc.pcCode]">
                     <span *ngIf="!pc.ssdSpace">
-                        {{pc.pcBrand }} 데스크탑 컴퓨터 {{pc.cpuKind}} ({{pc.cpuKind}}) {{pc.hddSpace}} HDD {{pc.graphicKind}} {{pc.osName}}
+                        {{pc.pcBrand }} 데스크탑 컴퓨터 {{pc.cpuKind}} ({{pc.cpuSpeed}}) {{pc.hddSpace}} HDD {{pc.graphicKind}} {{pc.osName}}
                     </span>
               <span *ngIf="!pc.hddSpace">
                       {{pc.pcBrand}} 데스크탑 컴퓨터 {{pc.cpuKind}} ({{pc.cpuSpeed}}) {{pc.ssdSpace}} SSD {{pc.graphicKind}} {{pc.osName}}

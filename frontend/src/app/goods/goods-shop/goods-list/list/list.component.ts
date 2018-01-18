@@ -1,10 +1,10 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {Observable} from "rxjs/Observable";
-import {PcList} from "../../../shared/model/pc-list";
+import {PcList} from "../../../../shared/model/pc-list";
 import 'rxjs/add/operator/map';
-import {GoodsListService} from "../../../shared/services/goods-list.service";
+import {GoodsListService} from "../../../../shared/services/goods-list.service";
 import {ActivatedRoute, ActivatedRouteSnapshot} from "@angular/router";
-import {PcListPageNum} from "../../../shared/model/pc-list-page-num";
+import {PcListPageNum} from "../../../../shared/model/pc-list-page-num";
 
 @Component({
   selector: 'app-list',

@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {Observable} from "rxjs/Observable";
-import {PcSummary} from "../../shared/model/pc-summary";
-import {PcDetail} from "../../shared/model/pc-detail";
-import {PcDetailImg} from "../../shared/model/pc-detail-img";
+import {PcSummary} from "../../../shared/model/pc-summary";
+import {PcDetail} from "../../../shared/model/pc-detail";
+import {PcDetailImg} from "../../../shared/model/pc-detail-img";
 import 'rxjs/add/operator/map';
 
 @Component({
