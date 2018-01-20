@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="xyz.thedyps.springbootangular.jwt.AuthDAO">
+
+    <select id="getUser" parameterType="String" resultType="xyz.thedyps.springbootangular.jwt.model.User">
+      SELECT id, pw, name, birth, gender, phone, address, email FROM USERS WHERE id = #{id}
+    </select>
+
+    <select id="getAuthority" parameterType="String"
+            resultType="xyz.thedyps.springbootangular.jwt.model.Authority">
+      SELECT U.authority, UA.name from USERS U join USERS_AUTHORITY UA ON u.authority = ua.authority
+      WHERE U.id = #{id}
+    </select>
+</mapper>

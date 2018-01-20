@@ -1,14 +1,15 @@
-package xyz.thedyps.springbootangular.member.memberVO;
+package xyz.thedyps.springbootangular.jwt.model;
 
 import java.util.Date;
+import java.util.List;
 
-public class MemberVO {
-    private String id, pw, name, phone, address, email, authority, gender;
+public class User {
+    private String id, pw, name, phone, address, email, gender;
+    private int authority;
     private Date birth;
+    private List<Authority> authorities;
 
-    public String getId() {
-        return id;
-    }
+    public String getId() { return id; }
 
     public void setId(String id) {
         this.id = id;
@@ -54,14 +55,6 @@ public class MemberVO {
         this.email = email;
     }
 
-    public String getAuthority() {
-        return authority;
-    }
-
-    public void setAuthority(String authority) {
-        this.authority = authority;
-    }
-
     public Date getBirth() {
         return birth;
     }
@@ -82,4 +75,15 @@ public class MemberVO {
         return this.pw.equals(pw);
     }
 
+    public List<Authority> getAuthorities() {
+        return authorities;
+    }
+
+    public void setAuthorities(List<Authority> authorities) {
+        this.authorities = authorities;
+    }
+
+    public int getAuthority() { return authority; }
+
+    public void setAuthority(int authority) { this.authority = authority; }
 }

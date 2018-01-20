@@ -10,8 +10,13 @@ public class ViewController {
         return "forward:/index.html";
     }
 
-    @RequestMapping(path = "/user/**")
+    @RequestMapping(path = "/member/**")
     public String index2() {
+        return "forward:/index.html";
+    }
+
+    @RequestMapping(path = "/admin/**")
+    public String index3() {
         return "forward:/index.html";
     }
 }
