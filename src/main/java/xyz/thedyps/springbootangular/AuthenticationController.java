@@ -10,22 +10,17 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import xyz.thedyps.springbootangular.jwt.JwtAuthenticationRequest;
 import xyz.thedyps.springbootangular.jwt.JwtAuthenticationResponse;
 import xyz.thedyps.springbootangular.jwt.JwtTokenUtil;
 
 import xyz.thedyps.springbootangular.service.JwtUserDetailsService;
 
-
-import javax.servlet.http.HttpServletRequest;
-
+@CrossOrigin
+@RequestMapping(path = "api/auth")
 @RestController
-public class AuthenticationRestController {
+public class AuthenticationController {
 
     @Value("${jwt.header}")
     private String tokenHeader;
@@ -39,8 +34,9 @@ public class AuthenticationRestController {
     @Autowired
     private JwtUserDetailsService userDetailsService;
 
+
     // 로그인 요청시에 실행한다.
-    @RequestMapping(value = "${jwt.route.authentication.path}", method = RequestMethod.POST)
+    @RequestMapping(path = "/login", method = RequestMethod.POST)
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtAuthenticationRequest authenticationRequest, Device device) throws AuthenticationException {
         // 클라이언트 사이드에서 전송한 authenticationRequest의 아이디와 패스워드를 사용한다.
         final Authentication authentication = authenticationManager.authenticate(

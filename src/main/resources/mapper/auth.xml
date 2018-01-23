@@ -3,7 +3,7 @@
 <mapper namespace="xyz.thedyps.springbootangular.jwt.AuthDAO">
 
     <select id="getUser" parameterType="String" resultType="xyz.thedyps.springbootangular.jwt.model.User">
-      SELECT id, pw, name, birth, gender, phone, address, email FROM USERS WHERE id = #{id}
+      SELECT id, pw, name, phone, address, email FROM USERS WHERE id = #{id}
     </select>
 
     <select id="getAuthority" parameterType="String"
@@ -11,4 +11,17 @@
       SELECT U.authority, UA.name from USERS U join USERS_AUTHORITY UA ON u.authority = ua.authority
       WHERE U.id = #{id}
     </select>
+
+    <insert id="insUser" parameterType="xyz.thedyps.springbootangular.jwt.model.User">
+        INSERT INTO USERS (id, pw, name, phone, address, email, authority)
+        VALUES (#{id}, #{pw}, #{name}, #{phone}, #{address}, #{email}, #{authority})
+    </insert>
+
+    <select id="getUserId" parameterType="String" resultType="String">
+        SELECT id FROM USERS WHERE id = #{id}
+    </select>
+
+    <update id="uptUser" parameterType="xyz.thedyps.springbootangular.jwt.model.User">
+        UPDATE USERS SET pw = #{pw}, name=#{name}, email=#{email}, address=#{address}, phone=#{phone} WHERE id = #{id}
+    </update>
 </mapper>

@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import {Login} from "../../../shared/model/login";
-import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {idValidator, passWordValidator} from "./loginValidator";
 import {AuthService} from "../../../shared/services/auth.service";
-import {AuthToken} from "../../../shared/model/auth-token";
+import {Router} from "@angular/router";
+import {MessagesService} from "../../../shared/services/messages.service";
 
 @Component({
   selector: 'app-login',
@@ -14,11 +15,15 @@ export class LoginComponent implements OnInit {
 
   model = new Login();
   loginForm: FormGroup;
-  token: AuthToken;
 
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService, private router: Router, private messagesService: MessagesService) {
+  }
 
   ngOnInit() {
+    if(this.authService.getToken()) {
+      this.messagesService.error('이미 로그인되어 있습니다.');
+      this.router.navigate([''])
+    }
     this.loginForm =  new FormGroup({
       'id': new FormControl('', [
         Validators.required,
@@ -39,7 +44,15 @@ export class LoginComponent implements OnInit {
 
   onSubmit() {
     if(this.loginForm.valid) {
-      this.authService.login(this.model).subscribe();
+      this.authService.login(this.model)
+        .subscribe(
+          () => {},
+          () => {
+            this.messagesService.error('아이디나 비밀번호가 잘못되었습니다.')
+          },
+          () => {
+            this.router.navigate([''])}
+        );
     }
   }
 }

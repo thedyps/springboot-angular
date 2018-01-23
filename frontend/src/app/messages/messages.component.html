@@ -1,0 +1,8 @@
+<div *ngIf="(errors$ | async).length > 0">
+  <div class="alert alert-danger">
+    <span class="glyphicon glyphicon-remove-circle" (click)="close()"></span>
+    <div *ngFor="let error of (errors$ | async)">
+      {{error}}
+    </div>
+  </div>
+</div>

@@ -9,19 +9,16 @@ import java.util.Date;
 
 public class JwtUser implements UserDetails {
 
-    private final String id, pw, name, phone, address, email, gender;
-    private final Date birth;
+    private final String id, pw, name, phone, address, email;
     private final Collection<? extends GrantedAuthority> authorities;
 
-    public JwtUser(String id, String pw, String name, String phone, String address, String email, String gender, Date birth, Collection<? extends GrantedAuthority> authorities) {
+    public JwtUser(String id, String pw, String name, String phone, String address, String email, Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.pw = pw;
         this.name = name;
         this.phone = phone;
         this.address = address;
         this.email = email;
-        this.gender = gender;
-        this.birth = birth;
         this.authorities = authorities;
     }
 

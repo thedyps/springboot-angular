@@ -1,18 +1,19 @@
 import { Injectable } from '@angular/core';
 import {Login} from "../model/login";
-import {AuthInfo} from "../model/auth-info";
-import {HttpClient, HttpHeaders} from "@angular/common/http";
-import {Observable} from "rxjs/Observable";
+import {HttpClient} from "@angular/common/http";
+import 'rxjs/add/operator/do';
+import * as JWT from "jwt-decode"
+
+
 @Injectable()
 export class AuthService {
 
   constructor(private _http: HttpClient) { }
 
-  login(login: Login): Observable<boolean> {
-    return this._http.post<boolean>('/api/auth/login', login)
+  login(login: Login) {
+    return this._http.post('/api/auth/login', login)
       .do(res => {
         let token = res['token'];
-        console.log(token);
         if(token) {
           localStorage.setItem('currentUser', JSON.stringify({username: login.id, token: token}));
           return true;
@@ -27,15 +28,23 @@ export class AuthService {
     return token ? token : "";
   }
 
+  isAdmin(): boolean {
+    let token = JSON.parse(localStorage.getItem('currentUser'));
+    let decodeToken;
+    let adminCheck: boolean = false;
+    if(token) {
+      decodeToken = JWT(token['token']);
+      for(var key in decodeToken.authority) {
+        var obj = decodeToken.authority[key];
+        if(obj['authority'] === 'ROLE_ADMIN') {
+          adminCheck = true;
+        }
+      }
+    }
+    return adminCheck;
+  }
+
   logOut(): void {
     localStorage.removeItem('currentUser');
   }
-
-
-  showUserInformation(token: string): Observable<AuthInfo> {
-    return this._http.get<AuthInfo>('/api/user', {
-      headers: new HttpHeaders().set('Authorization', 'Bearer ' + token)
-    })
-  }
-
 }

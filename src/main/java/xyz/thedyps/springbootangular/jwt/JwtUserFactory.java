@@ -21,8 +21,6 @@ public class JwtUserFactory {
                 user.getPhone(),
                 user.getAddress(),
                 user.getEmail(),
-                user.getGender(),
-                user.getBirth(),
                 mapToGrantedAuthorities(user.getAuthorities())
         );
     }

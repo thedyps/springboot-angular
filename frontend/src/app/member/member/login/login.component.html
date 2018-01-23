@@ -4,19 +4,14 @@
       <div class="panel panel-login">
         <div class="panel-heading">
           <div class="row">
-            <div class="col-xs-6">
-              <a href="#" id="login-form-link">로그인</a>
-            </div>
-            <div class="col-xs-6">
-              <a href="#" id="register-form-link">회원가입</a>
-            </div>
+            <div class="col-xs-12"><h2>로그인</h2></div>
           </div>
           <hr>
         </div>
         <div class="panel-body">
           <div class="row">
             <div class="col-lg-12">
-              <form role="form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+              <form role="form" [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate>
                 <div class="form-group">
 
                   <input type="text" id="id" formControlName="id"
@@ -35,7 +30,6 @@
                       아이디의 형식이 잘못되었습니다.
                     </div>
                   </div>
-
                 </div>
                 <div class="form-group">
                   <input type="password" formControlName="password" tabindex="2" class="form-control"
@@ -47,7 +41,7 @@
                       패스워드가 필요합니다.
                     </div>
                     <div *ngIf="password.errors.minlength">
-                      패스워드는 8글자 이상이어야 합니다.
+                      패스워드는 8글자 이상 15글자 이하입니다.
                     </div>
                     <div *ngIf="password.errors.passwordFormat">
                       패스워드의 형식이 잘못되었습니다.
@@ -60,18 +54,12 @@
                       <input type="submit" name="login-submit" id="login-submit" tabindex="3"
                              class="form-control btn btn-login" value="로그인">
                     </div>
-                    <div class="col-sm-6 col-sm-offset-3">
-                      <input type="button" name="login-submit" id="admin-test" tabindex="3"
-                             class="form-control btn btn-login" value="어드민 테스트" (click)="adminTest()">
-                    </div>
                   </div>
                 </div>
-                <div class="form-group">
-                  <div class="row">
-                    <div class="col-lg-12">
-                      <div class="text-center">
-                        <a tabindex="4" class="forgot-password">비밀번호 찾기</a>
-                      </div>
+                <div class="row">
+                  <div class="col-lg-12">
+                    <div class="text-center">
+                      <a tabindex="4" class="register" routerLink="/member/register">회원가입</a> <br>
                     </div>
                   </div>
                 </div>
@@ -83,7 +71,3 @@
     </div>
   </div>
 </div>
-
-<h1>
-  {{model | json}}
-</h1>

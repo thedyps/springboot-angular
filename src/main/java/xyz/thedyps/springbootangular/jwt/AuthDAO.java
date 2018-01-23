@@ -13,4 +13,7 @@ public interface AuthDAO {
 
     User getUser(String id);
     List<Authority> getAuthority(String id);
+    boolean insUser(User user);
+    String getUserId(String id);
+    boolean uptUser(User user);
 }

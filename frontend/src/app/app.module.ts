@@ -10,19 +10,23 @@ import {GoodsSummaryResolverService} from "./shared/services/goods-summary-resol
 import {GoodsDetailResolverService} from "./shared/services/goods-detail-resolver.service";
 import {GoodsDetailImgResolverService} from "./shared/services/goods-detail-img-resolver.service";
 import {AuthService} from "./shared/services/auth.service";
-import {CanActivateAuthGuardService} from "./shared/services/can-activate-auth-guard.service";
-
+import { MessagesComponent } from './messages/messages.component';
+import {MessagesService} from "./shared/services/messages.service";
+import {UserService} from "./shared/services/user.service";
+import {CanActivateUserAuthGuardService} from "./shared/services/can-activate-user-auth-guard.service";
+import {CanActivateAdminAuthGuardService} from "./shared/services/can-activate-admin-auth-guard.service";
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    MessagesComponent
   ],
   imports: [
     BrowserModule, AppRoutingModule, HttpClientModule
   ],
   providers: [{provide: APP_BASE_HREF, useValue: '/'}, GoodsListService, GoodsDetailService,
     GoodsSummaryResolverService, GoodsDetailResolverService, GoodsDetailImgResolverService, AuthService,
-    CanActivateAuthGuardService
+    CanActivateUserAuthGuardService, CanActivateAdminAuthGuardService, MessagesService, UserService
   ],
   bootstrap: [AppComponent]
 })

@@ -4,9 +4,8 @@ import java.util.Date;
 import java.util.List;
 
 public class User {
-    private String id, pw, name, phone, address, email, gender;
+    private String id, pw, name, phone, address, email;
     private int authority;
-    private Date birth;
     private List<Authority> authorities;
 
     public String getId() { return id; }
@@ -53,22 +52,6 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public Date getBirth() {
-        return birth;
-    }
-
-    public void setBirth(Date birth) {
-        this.birth = birth;
-    }
-
-    public String getGender() {
-        return gender;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
     }
 
     public boolean matchPassword(String pw) {

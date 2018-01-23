@@ -56,6 +56,10 @@ body {
   text-transform: uppercase;
   border-color: #59B2E6;
 }
+.register {
+  text-decoration: underline;
+  color: #029f5b;
+}
 .forgot-password {
   text-decoration: underline;
   color: #888;
