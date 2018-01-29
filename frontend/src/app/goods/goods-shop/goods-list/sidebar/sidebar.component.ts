@@ -9,7 +9,6 @@ import {PcFilter} from "../../../../shared/model/pc-filter";
 import {PcListPageNum} from "../../../../shared/model/pc-list-page-num";
 import {GoodsListService} from "../../../../shared/services/goods-list.service";
 import {FilterData} from "../../../../shared/model/filter-data";
-import {Subject} from "rxjs/Subject";
 
 @Component({
   selector: 'app-sidebar',
@@ -21,8 +20,6 @@ export class SidebarComponent implements OnInit {
   formModel: FormGroup;
   goodsFilter$: Observable<PcFilter>;
   pcListPageNum$: Observable<PcListPageNum>;
-  private btnClick = new Subject<Event>();
-  btnClick$: Observable<Event> = this.btnClick.asObservable();
   pcType: string;
   pageNumber: number;
 

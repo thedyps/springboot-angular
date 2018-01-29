@@ -20,7 +20,9 @@
       <ul class="list-unstyled">
         <li>
           <strong>등급 :</strong>
-          <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+          <span class="glyphicon glyphicon-star"
+                *ngFor="let num of 1 | forNumber:1:pcSummary.pcGrade" style="color:gold">
+          </span>
         </li>
         <li>
           <strong>재고:</strong> {{pcSummary.pcStock}}

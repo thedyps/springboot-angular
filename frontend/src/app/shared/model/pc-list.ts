@@ -17,7 +17,7 @@ export interface PcList {
   osName: string,
   deliveryDate: string;
   pcPrice: number,
-  pcDeliveryPrice: number,
+  pcDeliprice: number,
   pcGrade: number;
   pcListImg: PcListImg;
 }

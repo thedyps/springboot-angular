@@ -8,8 +8,9 @@ public class PcListVO {
 	private String pcCode, pcBrand, pcType, cpuName, cpuKind,
 	cpuSpeed, ramSpeed, mainBoardRamLimit, hddSpace,
 	hddSpeed, ssdSpace, ssdSpeed, graphicKind, osName;
-	private int pcPrice, pcDeliveryPrice, pcGrade;
+	private int pcPrice, pcDeliprice, pcGrade;
 	private final String deliveryDate;
+
 	private PcListImgVO pcListImg;
 	
 	public PcListVO() {
@@ -144,14 +145,6 @@ public class PcListVO {
 		this.pcPrice = pcPrice;
 	}
 
-	public int getPcDeliveryPrice() {
-		return pcDeliveryPrice;
-	}
-
-	public void setPcDeliveryPrice(int pcDeliveryPrice) {
-		this.pcDeliveryPrice = pcDeliveryPrice;
-	}
-
 	public int getPcGrade() {
 		return pcGrade;
 	}
@@ -170,5 +163,13 @@ public class PcListVO {
 
 	public String getDeliveryDate() {
 		return deliveryDate;
+	}
+
+	public int getPcDeliprice() {
+		return pcDeliprice;
+	}
+
+	public void setPcDeliprice(int pcDeliprice) {
+		this.pcDeliprice = pcDeliprice;
 	}
 }

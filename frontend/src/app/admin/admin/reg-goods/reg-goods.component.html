@@ -1,0 +1,465 @@
+<div class="container">
+  <h3>상품 등록</h3>
+  <div class="col-lg-12 well">
+    <div class="row">
+      <form role="form" #f="ngForm" novalidate (ngSubmit)="onSubmit(f.value, f.valid)">
+        <table class="table">
+          <thead>
+          <tr>
+            <th>항목</th>
+            <th colspan="2">등록</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <th>CODE</th>
+            <td colspan="2">
+              <input type="text" [value]="code$|async" disabled>
+              <input type="hidden" [ngModel]="code$|async" name="code" #code="ngModel" codeValidator required>
+              <div *ngIf="code.errors && (code.dirty || code.touched)" class="alert alert-danger">
+                <div *ngIf="code.errors.required">
+                  code가 필요합니다.
+                </div>
+                <div *ngIf="code.errors.codeFormat">
+                  code의 형식이 잘못되었습니다.
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <th>BRAND</th>
+            <td colspan="2">
+              <select id="brand" name="brand" ngModel #brand="ngModel" required>
+                <option value="" disabled selected>선택해주세요.</option>
+                <option *ngFor="let brand of brandList" [value]="brand">
+                  {{brand}}
+                </option>
+              </select>
+              <div *ngIf="brand.errors && (brand.dirty || brand.touched)" class="alert alert-danger">
+                <div *ngIf="brand.errors.required">
+                  brand가 필요합니다.
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <th>TYPE</th>
+            <td colspan="2">
+              <select id="type" name="type" ngModel #type="ngModel" required>
+                <option value="" disabled selected>선택해주세요.</option>
+                <option *ngFor="let type of typeList" [value]="type">
+                  {{type}}
+                </option>
+              </select>
+              <div *ngIf="type.errors && (type.dirty || type.touched)" class="alert alert-danger">
+                <div *ngIf="type.errors.required">
+                  type이 필요합니다.
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <th>CPU</th>
+            <td>
+              <button type="button" class="btn btn-primary" (click)="getCpuBrand()">CPU 등록</button>
+            </td>
+            <td>
+              <table>
+                <tr>
+                  <td *ngIf="cpuObservables['brand'] | async as brands">
+                    <label for="cpuBrand">CPU 브랜드</label>
+                    <select id="cpuBrand" name="cpuBrand" ngModel #cpuBrand="ngModel" (click)="getCpuKind(cpuBrand.value)">
+                      <option value="" disabled selected>선택해주세요.</option>
+                      <option *ngFor="let brand of brands" [value]="brand">
+                        {{brand}}
+                      </option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td *ngIf="cpuObservables['kind'] | async as kinds">
+                    <label for="cpuKind">CPU 종류</label>
+                    <select id="cpuKind" name="cpuKind" ngModel #cpuKind="ngModel" (click)="getCpu(f.value.cpuBrand,cpuKind.value)">
+                      <option value="" disabled selected>선택해주세요.</option>
+                      <option *ngFor="let kind of kinds" [value]="kind">
+                        {{kind}}
+                      </option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td *ngIf="(cpuObservables['cpu'] | async).length > 0">
+                    <label for="cpu">CPU 이름</label>
+                    <select id="cpu" name="cpu" ngModel #cpu="ngModel" (change)="getCpuInfo(cpu.value)">
+                      <option value="" disabled selected>선택해주세요.</option>
+                      <option *ngFor="let cpu of cpuObservables['cpu'] | async" [value]="cpu.code">
+                        {{cpu.name}}
+                      </option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td *ngIf="(cpuObservables['cpuInfo'] | async).price > 0">
+                    <label for="cpuPrice">CPU 가격</label>
+                    <input type="text" [ngModel]="(cpuObservables['cpuInfo'] | async).price" id="cpuPrice" name="cpuPrice"
+                    disabled>
+                  </td>
+                </tr>
+                <tr>
+                  <td *ngIf="(cpuObservables['cpuInfo'] | async).price > 0">
+                    <label for="cpuGrade">CPU 등급</label>
+                    <input type="text" [ngModel]="(cpuObservables['cpuInfo'] | async).grade" id="cpuGrade" name="cpuGrade"
+                    disabled>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <th>RAM</th>
+            <td>
+              <button type="button" class="btn btn-primary" (click)="getRamBrand()">RAM 등록</button>
+            </td>
+            <td>
+              <table>
+                <tr>
+                  <td *ngIf="ramObservables['brand'] | async as brands">
+                    <label for="ramBrand">RAM 브랜드</label>
+                    <select id="ramBrand" name="ramBrand" ngModel #ramBrand="ngModel" (click)="getRamSpeed(ramBrand.value)">
+                      <option value="" disabled selected>선택해주세요.</option>
+                      <option *ngFor="let brand of brands" [value]="brand">
+                        {{brand}}
+                      </option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td *ngIf="ramObservables['speed'] | async as speeds">
+                    <label for="ramSpeed">RAM 속도</label>
+                    <select id="ramSpeed" name="ramSpeed" ngModel #ramSpeed="ngModel" (click)="getRam(f.value.ramBrand, ramSpeed.value)">
+                      <option value="" disabled selected>선택해주세요.</option>
+                      <option *ngFor="let speed of speeds" [value]="speed">
+                        {{speed}}
+                      </option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td *ngIf="(ramObservables['ram'] | async).length > 0">
+                    <label for="ram">RAM 이름</label>
+                    <select id="ram" name="ram" ngModel #ram="ngModel" (change)="getRamInfo(ram.value)">
+                      <option value="" disabled selected>선택해주세요.</option>
+                      <option *ngFor="let ram of ramObservables['ram'] | async" [value]="ram.code">
+                        {{ram.name}}
+                      </option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td *ngIf="(ramObservables['ramInfo'] | async).price > 0">
+                    <label for="ramPrice">RAM 가격</label>
+                    <input type="text" [ngModel]="(ramObservables['ramInfo'] | async).price" id="ramPrice" name="ramPrice"
+                    disabled>
+                  </td>
+                </tr>
+                <tr>
+                  <td *ngIf="(ramObservables['ramInfo'] | async).price > 0">
+                    <label for="ramGrade">RAM 등급</label>
+                    <input type="text" [ngModel]="(ramObservables['ramInfo'] | async).grade" id="ramGrade" name="ramGrade"
+                    disabled>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <th>GRAPHIC</th>
+            <td><button type="button" class="btn btn-primary" (click)="getGraBrand()">GRAPHIC 등록</button></td>
+            <td>
+              <table>
+                <tr>
+                  <td *ngIf="graObservables['brand'] | async as brands">
+                    <label for="graBrand">GRAPHIC 브랜드</label>
+                    <select id="graBrand" name="graBrand" ngModel #graBrand="ngModel" (click)="getGraKind(graBrand.value)">
+                      <option value="" disabled selected>선택해주세요.</option>
+                      <option *ngFor="let brand of brands" [value]="brand">
+                        {{brand}}
+                      </option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td *ngIf="graObservables['kind'] | async as kinds">
+                    <label for="graKind">GRAPHIC 종류</label>
+                    <select id="graKind" name="graKind" ngModel #graKind="ngModel" (click)="getGra(f.value.graBrand, graKind.value)">
+                      <option value="" disabled selected>선택해주세요.</option>
+                      <option *ngFor="let kind of kinds" [value]="kind">
+                        {{kind}}
+                      </option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td *ngIf="(graObservables['gra'] | async).length > 0">
+                    <label for="gra">GRAPHIC 이름</label>
+                    <select id="gra" name="gra" ngModel #gra="ngModel" (change)="getGraInfo(gra.value)">
+                      <option value="" disabled selected>선택해주세요.</option>
+                      <option *ngFor="let ram of graObservables['gra'] | async" [value]="ram.code">
+                        {{ram.name}}
+                      </option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td *ngIf="(graObservables['graInfo'] | async).price > 0">
+                    <label for="graPrice">GRAPHIC 가격</label>
+                    <input type="text" [ngModel]="(graObservables['graInfo'] | async).price" id="graPrice" name="graPrice"
+                    disabled>
+                  </td>
+                </tr>
+                <tr>
+                  <td *ngIf="(graObservables['graInfo'] | async).price > 0">
+                    <label for="graGrade">GRAPHIC 등급</label>
+                    <input type="text" [ngModel]="(graObservables['graInfo'] | async).grade" id="graGrade" name="graGrade"
+                    disabled>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <th>HDD</th>
+            <td><button type="button" class="btn btn-primary" (click)="getHddBrand()">HDD 등록</button></td>
+            <td>
+              <table>
+                <tr>
+                  <td *ngIf="hddObservables['brand'] | async as brands">
+                    <label for="hddBrand">HDD 브랜드</label>
+                    <select id="hddBrand" name="hddBrand" ngModel #hddBrand="ngModel" (click)="getHddSpeed(hddBrand.value)">
+                      <option value="" disabled selected>선택해주세요.</option>
+                      <option *ngFor="let brand of brands" [value]="brand">
+                        {{brand}}
+                      </option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td *ngIf="hddObservables['speed'] | async as speeds">
+                    <label for="hddSpeed">HDD 속도</label>
+                    <select id="hddSpeed" name="hddSpeed" ngModel #hddSpeed="ngModel" (click)="getHdd(f.value.hddBrand, hddSpeed.value)">
+                      <option value="" disabled selected>선택해주세요.</option>
+                      <option *ngFor="let speed of speeds" [value]="speed">
+                        {{speed}}
+                      </option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td *ngIf="(hddObservables['hdd'] | async).length > 0">
+                    <label for="hdd">HDD 이름</label>
+                    <select id="hdd" name="hdd" ngModel #hdd="ngModel" (change)="getHddInfo(hdd.value)">
+                      <option value="" disabled selected>선택해주세요.</option>
+                      <option *ngFor="let hdd of hddObservables['hdd'] | async" [value]="hdd.code">
+                        {{hdd.name}}
+                      </option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td *ngIf="(hddObservables['hddInfo'] | async).price > 0">
+                    <label for="hddPrice">HDD 가격</label>
+                    <input type="text" [ngModel]="(hddObservables['hddInfo'] | async).price" id="hddPrice" name="hddPrice"
+                    disabled>
+                  </td>
+                </tr>
+                <tr>
+                  <td *ngIf="(hddObservables['hddInfo'] | async).price > 0">
+                    <label for="hddGrade">HDD 등급</label>
+                    <input type="text" [ngModel]="(hddObservables['hddInfo'] | async).grade" id="hddGrade" name="hddGrade"
+                    disabled>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <th>SSD</th>
+            <td><button type="button" class="btn btn-primary" (click)="getSsdBrand()">SSD 등록</button></td>
+            <td>
+              <table>
+                <tr>
+                  <td *ngIf="ssdObservables['brand'] | async as brands">
+                    <label for="ssdBrand">SSD 브랜드</label>
+                    <select id="ssdBrand" name="ssdBrand" ngModel #ssdBrand="ngModel" (click)="getSsdSpeed(ssdBrand.value)">
+                      <option value="" disabled selected>선택해주세요.</option>
+                      <option *ngFor="let brand of brands" [value]="brand">
+                        {{brand}}
+                      </option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td *ngIf="ssdObservables['speed'] | async as speeds">
+                    <label for="ssdSpeed">SSD 종류</label>
+                    <select id="ssdSpeed" name="ssdSpeed" ngModel #ssdSpeed="ngModel" (click)="getSsd(f.value.ssdBrand, ssdSpeed.value)">
+                      <option value="" disabled selected>선택해주세요.</option>
+                      <option *ngFor="let speed of speeds" [value]="speed">
+                        {{speed}}
+                      </option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td *ngIf="(ssdObservables['ssd'] | async).length > 0">
+                    <label for="ssd">SSD 이름</label>
+                    <select id="ssd" name="ssd" ngModel #ssd="ngModel" (change)="getSsdInfo(ssd.value)">
+                      <option value="" disabled selected>선택해주세요.</option>
+                      <option *ngFor="let ssd of ssdObservables['ssd'] | async" [value]="ssd.code">
+                        {{ssd.name}}
+                      </option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td *ngIf="(ssdObservables['ssdInfo'] | async).price > 0">
+                    <label for="ssdPrice">SSD 가격</label>
+                    <input type="text" [ngModel]="(ssdObservables['ssdInfo'] | async).price" id="ssdPrice" name="ssdPrice"
+                           disabled>
+                  </td>
+                </tr>
+                <tr>
+                  <td *ngIf="(ssdObservables['ssdInfo'] | async).price > 0">
+                    <label for="ssdGrade">SSD 등급</label>
+                    <input type="text" [ngModel]="(ssdObservables['ssdInfo'] | async).grade" id="ssdGrade" name="ssdGrade"
+                           disabled>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <th>MAINBOARD</th>
+            <td><button type="button" class="btn btn-primary" (click)="getMainBrand()">MAINBOARD 등록</button></td>
+            <td>
+              <table>
+                <tr>
+                  <td *ngIf="mainObservables['brand'] | async as brands">
+                    <label for="mainBrand">MAINBOARD 브랜드</label>
+                    <select id="mainBrand" name="mainBrand" ngModel #mainBrand="ngModel" (click)="getMain(mainBrand.value)">
+                      <option value="" disabled selected>선택해주세요.</option>
+                      <option *ngFor="let brand of brands" [value]="brand">
+                        {{brand}}
+                      </option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td *ngIf="(mainObservables['main'] | async).length > 0">
+                    <label for="main">MAINBOARD 이름</label>
+                    <select id="main" name="main" ngModel #main="ngModel" (change)="getMainInfo(main.value)">
+                      <option value="" disabled selected>선택해주세요.</option>
+                      <option *ngFor="let main of mainObservables['main'] | async" [value]="main.code">
+                        {{main.name}}
+                      </option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td *ngIf="(mainObservables['mainInfo'] | async).price > 0">
+                    <label for="mainPrice">MAINBOARD 가격</label>
+                    <input type="text" [ngModel]="(mainObservables['mainInfo'] | async).price" id="mainPrice" name="mainPrice"
+                           disabled>
+                  </td>
+                </tr>
+                <tr>
+                  <td *ngIf="(mainObservables['mainInfo'] | async).price > 0">
+                    <label for="mainGrade">MAINBOARD 등급</label>
+                    <input type="text" [ngModel]="(mainObservables['mainInfo'] | async).grade" id="mainGrade" name="mainGrade"
+                           disabled>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <th>OS</th>
+            <td><button type="button" class="btn btn-primary" (click)="getOs()">OS 등록</button></td>
+            <td>
+              <table>
+                <tr>
+                  <td *ngIf="(osObservables['os'] | async).length > 0">
+                    <label for="os">OS 이름</label>
+                    <select id="os" name="os" ngModel #os="ngModel" (click)="getOs()" (change)="getOsInfo(os.value)">
+                      <option value="" disabled selected>선택해주세요.</option>
+                      <option *ngFor="let os of osObservables['os'] | async" [value]="os.code">
+                        {{os.name}}
+                      </option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td *ngIf="(osObservables['osInfo'] | async).price > 0">
+                    <label for="osPrice">OS 가격</label>
+                    <input type="text" [ngModel]="(osObservables['osInfo'] | async).price" id="osPrice" name="osPrice"
+                           disabled>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          </tbody>
+          <tfoot>
+          <tr>
+            <th>항목 합산 가격</th>
+            <td colspan="2">
+              <input type="text" [ngModel]="priceSum$ | async" name="sumPrice" #sumPrice required>
+            </td>
+          </tr>
+          <tr>
+            <th>항목 등급 평균</th>
+            <td colspan="2">
+              <input type="hidden" [ngModel]="gradeAvg$ | async" name="avgGrade" #avgGrade>
+              <span class="glyphicon glyphicon-star star"
+                    *ngFor="let num of 1 | forNumber:1:(gradeAvg$ | async)"></span>
+            </td>
+          </tr>
+          <tr>
+            <th>배송료</th>
+            <td colspan="2">
+              <input type="text" ngModel #deliPrice="ngModel" name="deliPrice" required numberValidator>
+              <div *ngIf="deliPrice.errors && (deliPrice.dirty || deliPrice.touched)" class="alert alert-danger">
+                <div *ngIf="deliPrice.errors.required">
+                  배송료가 필요합니다.
+                </div>
+                <div *ngIf="deliPrice.errors.numberFormat">
+                  배송료의 형식이 잘못되었습니다.
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <th>재고</th>
+            <td colspan="2">
+              <input type="text" ngModel #stock="ngModel" name="stock" required numberValidator>
+              <div *ngIf="stock.errors && (stock.dirty || stock.touched)" class="alert alert-danger">
+                <div *ngIf="stock.errors.required">
+                  재고가 필요합니다.
+                </div>
+                <div *ngIf="stock.errors.numberFormat">
+                  재고의 형식이 잘못되었습니다.
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="3" class="text-center">
+              <button type="submit" class="btn-lg btn-primary">등록</button>
+              <button type="button">이미지 등록</button>
+            </td>
+          </tr>
+          </tfoot>
+        </table>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,13 +1,13 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import {AdminComponent} from "./admin/admin.component";
-import {GoodsAddComponent} from "./admin/goods-add/goods-add.component";
+import {RegGoodsComponent} from "./admin/reg-goods/reg-goods.component";
 
 const routes: Routes = [
   {
     path: '', component: AdminComponent,
     children: [
-      {path: 'goodsadd', component: GoodsAddComponent}
+      {path: 'reggoods', component: RegGoodsComponent}
     ]
   }
 ];

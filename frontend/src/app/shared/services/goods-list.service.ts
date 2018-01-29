@@ -105,6 +105,7 @@ export class GoodsListService {
         .switchMap(() => this.getSearchList(pcType, num, this.filterData),
           (count, list) => <any> [count, list]);
     }
+
     return this.getCount(pcType)
       .do(() => this.loadPcListPageNum(pcType, num))
       .switchMap(() => this.getList(pcType, num),
@@ -118,7 +119,8 @@ export class GoodsListService {
     let endPage: number = 0;
 
     if(this.pcCount > 0) {
-      pageCount = Math.floor(this.pcCount / GoodsListService.PAGE_SIZE) + (this.pcCount % GoodsListService.PAGE_SIZE == 0 ? 0 : 1);
+      pageCount = Math.floor(this.pcCount / GoodsListService.PAGE_SIZE) +
+        (this.pcCount % GoodsListService.PAGE_SIZE == 0 ? 0 : 1);
 
       if (currentPage % 10 != 0) {
         startPage = Math.floor(currentPage / 10) * 10 + 1;

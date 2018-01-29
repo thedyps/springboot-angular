@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="xyz.thedyps.springbootangular.admin.RegGoodsDAO">
+    <select id="getCpuBrand" resultType="String">
+        SELECT DISTINCT brand FROM CPU
+    </select>
+
+    <select id="getCpuKind" resultType="String" parameterType="String">
+        SELECT DISTINCT kind FROM CPU WHERE brand = #{param}
+    </select>
+
+    <select id="getCpu" resultType="xyz.thedyps.springbootangular.admin.adminVO.RegPartsVO" parameterType="map">
+        SELECT code, name FROM CPU WHERE brand = #{brand} AND kind = #{kind}
+    </select>
+
+    <select id="getCpuInfo" resultType="xyz.thedyps.springbootangular.admin.adminVO.RegInfoVO" parameterType="String">
+        SELECT price, grade FROM CPU WHERE code = #{param}
+    </select>
+
+    <select id="getRamBrand" resultType="String">
+        SELECT DISTINCT brand FROM RAM
+    </select>
+
+    <select id="getRamSpeed" resultType="String" parameterType="String">
+        SELECT DISTINCT speed FROM RAM WHERE brand = #{param}
+    </select>
+
+    <select id="getRam" resultType="xyz.thedyps.springbootangular.admin.adminVO.RegPartsVO" parameterType="map">
+        SELECT code, name FROM RAM WHERE brand = #{brand} AND speed = #{speed}
+    </select>
+
+    <select id="getRamInfo" resultType="xyz.thedyps.springbootangular.admin.adminVO.RegInfoVO" parameterType="String">
+        SELECT price, grade FROM RAM WHERE code = #{param}
+    </select>
+
+    <select id="getGraBrand" resultType="String">
+        SELECT DISTINCT brand FROM GRAPHIC
+    </select>
+
+    <select id="getGraKind" resultType="String" parameterType="String">
+        SELECT DISTINCT kind FROM GRAPHIC WHERE brand = #{param}
+    </select>
+
+    <select id="getGra" resultType="xyz.thedyps.springbootangular.admin.adminVO.RegPartsVO" parameterType="map">
+        SELECT code, name FROM GRAPHIC WHERE brand = #{brand} and kind = #{kind}
+    </select>
+
+    <select id="getGraInfo" resultType="xyz.thedyps.springbootangular.admin.adminVO.RegInfoVO" parameterType="String">
+        SELECT price, grade FROM GRAPHIC WHERE code = #{param}
+    </select>
+
+    <select id="getHddBrand" resultType="String">
+        SELECT DISTINCT brand FROM HDD
+    </select>
+
+    <select id="getHddSpeed" resultType="String" parameterType="String">
+        SELECT DISTINCT speed FROM HDD WHERE brand = #{param}
+    </select>
+
+    <select id="getHdd" resultType="xyz.thedyps.springbootangular.admin.adminVO.RegPartsVO" parameterType="map">
+        SELECT code, name FROM HDD WHERE brand = #{brand} AND speed = #{speed}
+    </select>
+
+    <select id="getHddInfo" resultType="xyz.thedyps.springbootangular.admin.adminVO.RegInfoVO" parameterType="String">
+        SELECT price, grade FROM HDD WHERE code = #{param}
+    </select>
+
+    <select id="getSsdBrand" resultType="String">
+        SELECT DISTINCT brand FROM SSD
+    </select>
+
+    <select id="getSsdSpeed" resultType="String" parameterType="String">
+        SELECT DISTINCT speed FROM SSD WHERE brand = #{param}
+    </select>
+
+    <select id="getSsd" resultType="xyz.thedyps.springbootangular.admin.adminVO.RegPartsVO" parameterType="map">
+        SELECT code, name FROM SSD WHERE brand = #{brand} AND speed = #{speed}
+    </select>
+
+    <select id="getSsdInfo" resultType="xyz.thedyps.springbootangular.admin.adminVO.RegInfoVO" parameterType="String">
+        SELECT price, grade FROM SSD WHERE code = #{param}
+    </select>
+
+    <select id="getMainBrand" resultType="String">
+        SELECT DISTINCT brand FROM MAINBOARD
+    </select>
+
+    <select id="getMain" resultType="xyz.thedyps.springbootangular.admin.adminVO.RegPartsVO" parameterType="String">
+        SELECT code, name FROM MAINBOARD WHERE brand = #{param}
+    </select>
+
+    <select id="getMainInfo" resultType="xyz.thedyps.springbootangular.admin.adminVO.RegInfoVO" parameterType="String">
+        SELECT price, grade FROM MAINBOARD WHERE code = #{param}
+    </select>
+
+    <select id="getOs" resultType="xyz.thedyps.springbootangular.admin.adminVO.RegPartsVO">
+        SELECT code, name FROM OS
+    </select>
+
+    <select id="getOsInfo" resultType="xyz.thedyps.springbootangular.admin.adminVO.RegInfoVO" parameterType="String">
+        SELECT price FROM OS WHERE code = #{param}
+    </select>
+    
+    <select id="getLatestCode" resultType="String">
+        SELECT code FROM (
+          SELECT ROWNUM rnum, result.* FROM (
+            SELECT code FROM PC ORDER BY code DESC
+          ) result
+        ) WHERE rnum = 1
+    </select>
+
+    <select id="getImgList" resultType="xyz.thedyps.springbootangular.admin.adminVO.ImgListVO" parameterType="String">
+        SELECT imgorder, imgpath FROM BRANDIMAGE WHERE brand = #{param}
+    </select>
+
+    <insert id="regGoods" parameterType="map">
+        INSERT INTO PC (code, cpu, ram, graphic, hdd, ssd, mainboard, os, brand, type, price, grade, deliveryprice, stock)
+        VALUES (#{code}, #{cpu}, #{ram}, #{gra}, #{hdd}, #{ssd}, #{main}, #{os}, #{brand}, #{type}, #{sumPrice}, #{avgGrade},
+        #{deliPrice}, #{stock})
+    </insert>
+
+    <insert id="regImg" parameterType="map">
+        INSERT INTO PCIMAGE VALUES (#{pccode}, #{imgorder}, #{imgpath})
+    </insert>
+</mapper>

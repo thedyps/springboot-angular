@@ -43,8 +43,8 @@
               <span>예상 배송일: {{pc.deliveryDate}}</span>
             </div>
             <div>
-              <span *ngIf="pc.pcDeliveryPrice > 0">배송료 : {{pc.pcDeliveryPrice|currency:'KRW'}}원</span>
-              <span *ngIf="pc.pcDeliveryPrice <= 0">배송료 : 무료 배송</span>
+              <span *ngIf="pc.pcDeliprice > 0">배송료 : {{pc.pcDeliprice|currency:'KRW'}}</span>
+              <span *ngIf="pc.pcDeliprice <= 0">배송료 : 무료 배송</span>
             </div>
           </div>
           <div>
