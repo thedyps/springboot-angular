@@ -122,4 +122,69 @@
     <insert id="regImg" parameterType="map">
         INSERT INTO PCIMAGE VALUES (#{pccode}, #{imgorder}, #{imgpath})
     </insert>
+
+    <select id="getRegCount" parameterType="xyz.thedyps.springbootangular.admin.adminVO.RegFilterVO" resultType="int">
+    SELECT
+    count(*)
+    FROM PC P
+        <where>
+            <if	test="type != 'All'">
+                P.type = #{type, javaType=String}
+            </if>
+            <if test="code != null and code != ''" >
+                AND P.code LIKE '%' || #{code, javaType=String} || '%'
+            </if>
+            <if test="brand != null and brand != ''">
+                AND P.brand LIKE '%' || #{brand, javaType=String} || '%'
+            </if>
+        </where>
+    </select>
+
+    <select id="getRegGoods" parameterType="xyz.thedyps.springbootangular.admin.adminVO.RegFilterVO" resultType="xyz.thedyps.springbootangular.admin.adminVO.RegGoodsVO">
+    SELECT * FROM (
+    SELECT ROWNUM rnum, result.* FROM (
+    SELECT P.code pc_code, P.brand pc_brand, P.type pc_type,
+    P.price pc_price, P.DELIVERYPRICE pc_deliprice, P.grade pc_grade, P.stock pc_stock,
+    C.code cpu_code, C.name cpu_name,
+    R.code ram_code, R.name ram_name,
+    M.code main_code, M.name main_name,
+    H.code hdd_code, H.name hdd_name,
+    S.code ssd_code, S.name ssd_name,
+    G.code gra_code, G.name gra_name,
+    O.code os_code, O.name os_name
+    FROM PC P
+    JOIN CPU C ON P.cpu = C.code
+    JOIN RAM R ON P.ram = R.code
+    JOIN MAINBOARD M ON P.mainboard = M.code
+    LEFT OUTER JOIN HDD H ON P.hdd = H.code
+    LEFT OUTER JOIN SSD S ON P.ssd = S.code
+    JOIN GRAPHIC G ON P.graphic = G.code
+    JOIN OS O ON P.os = O.code
+        <where>
+            <if	test="type != 'All'">
+                P.type = #{type, javaType=String}
+            </if>
+            <if test="code != null and code != ''" >
+                AND P.code LIKE '%' || #{code, javaType=String} || '%'
+            </if>
+            <if test="brand != null and brand != ''">
+                AND P.brand LIKE '%' || #{brand, javaType=String} || '%'
+            </if>
+        </where>
+        ) result
+        ) WHERE rnum BETWEEN #{start,javaType=int} AND #{end,javaType=int}
+    </select>
+
+    <insert id="uptGoods" parameterType="map">
+        UPDATE PC SET cpu=#{cpu}, ram=#{ram}, graphic=#{gra}, hdd=#{hdd}, ssd=#{ssd}, mainboard= #{main}, os=#{os}, brand=#{brand},
+        type=#{type}, price=#{sumPrice}, grade=#{avgGrade}, deliveryprice= #{deliPrice}, stock=#{stock} WHERE code=#{code}
+    </insert>
+
+    <insert id="uptImg" parameterType="map">
+        UPDATE PCIMAGE SET imgpath=#{imgpath} WHERE pccode=#{pccode} AND imgorder=#{imgorder}
+    </insert>
+
+    <delete id="delGoods" parameterType="String">
+        DELETE FROM PC WHERE code = #{param}
+    </delete>
 </mapper>

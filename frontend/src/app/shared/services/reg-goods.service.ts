@@ -3,14 +3,25 @@ import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
 import {Observable} from "rxjs/Observable";
 import {AuthService} from "./auth.service";
-import {RegInfo, RegPart} from "../model/regGoods";
+import {RegFilter, RegGoods, RegInfo, RegPageNum, RegPart} from "../model/regGoods";
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/publishLast'
 import 'rxjs/add/operator/first'
 import 'rxjs/add/operator/switchMap'
-import {isNumber} from "util";
 
 const baseUrl = 'api/admin/regGoods/';
+const UNKNOWN_REG_GOODS: RegGoods = {
+  pcPrice: 0, pcDeliprice: 0 , pcGrade: 0 , pcStock: 0,
+  pcCode: '', pcBrand: '', pcType: '',
+  cpuCode: '', cpuName: '', ramCode: '', ramName: '', mainCode: '', mainName: '',
+  graCode: '', graName: '', osCode: '', osName: ''
+};
+const UNKNOWN_REG_PAGE_NUM: RegPageNum = {
+  startPage:0,
+  endPage:0,
+  pageCount:0
+};
+
 
 @Injectable()
 export class RegGoodsService {
@@ -345,5 +356,169 @@ export class RegGoodsService {
     return this._http.post(baseUrl+'regGoods', param, {headers: this.headers});
   }
 
+  private static readonly COLUMN_SIZE = 10;
+  regFilter: RegFilter = {
+    'code': '',
+    'type': 'All',
+    'brand': '',
+    'start': 1,
+    'end': 10
+  };
+  regPageCount: number;
+  regCount: number;
+
+  private regFilterSubject = new BehaviorSubject<RegFilter>(this.regFilter);
+  regFilter$: Observable<RegFilter> = this.regFilterSubject.asObservable();
+
+  regFilterSub(): Observable<any> {
+    return this.regFilter$
+      .do(data => this.regFilter = data);
+  }
+
+  setRegFilter(param: any) {
+    this.regFilterSubject.next(param);
+  }
+
+  private regCountSubject = new BehaviorSubject<number>(0);
+  regCount$: Observable<number> = this.regCountSubject.asObservable();
+
+  getRegCount(): Observable<any> {
+    return this._http.patch<number>(baseUrl + 'getRegCount', this.regFilter, {headers: this.headers})
+      .do(count => this.regCountSubject.next(count))
+      .publishLast().refCount();
+  }
+
+  regCountSub(): Observable<any> {
+    return this.regCount$
+      .do(data => this.regCount = data);
+  }
+
+  private regGoodsSubject = new BehaviorSubject<RegGoods[]>([]);
+  regGoods$: Observable<RegGoods[]> = this.regGoodsSubject.asObservable();
+
+  getRegGoods(): Observable<any> {
+    return this._http.patch<RegGoods[]>(baseUrl + 'getRegGoods', this.regFilter, {headers: this.headers})
+      .do(data => this.regGoodsSubject.next(data))
+      .publishLast().refCount();
+  }
+
+  loadRegGoodsRecord(num: number): Observable<[any, any]> {
+    return this.getRegCount()
+      .do(() => this.loadRegPageNum(num))
+      .switchMap(() => this.getRegGoods(),
+        (count, list) => <any> [count, list]);
+  }
+
+  private regPageNumSubject = new BehaviorSubject<RegPageNum>(UNKNOWN_REG_PAGE_NUM);
+  regPageNum$: Observable<RegPageNum> = this.regPageNumSubject.asObservable();
+
+  regPageCountSub(): Observable<any> {
+    return this.regPageNum$
+      .do(data => this.regPageCount = data.pageCount);
+  }
+
+  loadRegPageNum(num: number) {
+    let currentPage: number = num;
+    let pageCount: number = 0;
+    let startPage: number = 0;
+    let endPage: number = 0;
+
+    if(this.regCount > 0) {
+      pageCount = Math.floor(this.regCount / RegGoodsService.COLUMN_SIZE) +
+        (this.regCount % RegGoodsService.COLUMN_SIZE == 0 ? 0 : 1);
+
+      if (currentPage % 10 != 0) {
+        startPage = Math.floor(currentPage / 10) * 10 + 1;
+      } else {
+        startPage = (Math.floor(currentPage / 10) - 1) * 10 + 1;
+      }
+
+      endPage= startPage + RegGoodsService.COLUMN_SIZE - 1;
+      if (endPage > pageCount) endPage = pageCount;
+    }
+
+    let regPageNum: RegPageNum = {
+      startPage: startPage,
+      endPage: endPage,
+      pageCount: pageCount
+    };
+    this.regPageNumSubject.next(regPageNum);
+  }
+
+  preRecord(num: number): Observable<[any, any]> {
+    let currentPage: number = num;
+    if(currentPage > 1) {
+      currentPage -= 1;
+      this.regFilter.start = currentPage*10-9;
+      this.regFilter.end = currentPage*10;
+      this.regFilterSubject.next(this.regFilter);
+      return this.loadRegGoodsRecord(currentPage);
+    }
+  }
+
+  nextRecord(num: number): Observable<[any, any]> {
+    let currentPage: number = num;
+    if(currentPage < this.regPageCount) {
+      currentPage += 1;
+      this.regFilter.start = currentPage*10-9;
+      this.regFilter.end = currentPage*10;
+      this.regFilterSubject.next(this.regFilter);
+      return this.loadRegGoodsRecord(currentPage);
+    }
+  }
+
+  recordChange(num: number): Observable<[any, any]> {
+    let currentPage = num;
+    this.regFilter.start = currentPage*10-9;
+    this.regFilter.end = currentPage*10;
+    this.regFilterSubject.next(this.regFilter);
+    return this.loadRegGoodsRecord(currentPage);
+  }
+
+  uptGoods(param: any): Observable<any> {
+    return this._http.post(baseUrl + 'uptGoods', param, {headers: this.headers});
+  }
+
+  uptImage(param: any) {
+    return this._http.post(baseUrl + 'uptImage', param, {headers: this.headers});
+  }
+
+  searchClear() {
+    this.cpuBrandSubject.next('');
+    this.cpuKindSubject.next('');
+    this.cpuSubject.next([]);
+    this.cpuInfoSubject.next({price: 0, grade: 0});
+
+    this.ramBrandSubject.next('');
+    this.ramSpeedSubject.next('');
+    this.ramSubject.next([]);
+    this.ramInfoSubject.next({price: 0, grade: 0});
+
+    this.graBrandSubject.next('');
+    this.graKindSubject.next('');
+    this.graSubject.next([]);
+    this.graInfoSubject.next({price: 0, grade: 0});
+
+    this.hddBrandSubject.next('');
+    this.hddSpeedSubject.next('');
+    this.hddSubject.next([]);
+    this.hddInfoSubject.next({price: 0, grade: 0});
+
+    this.ssdBrandSubject.next('');
+    this.ssdSpeedSubject.next('');
+    this.ssdSubject.next([]);
+    this.ssdInfoSubject.next({price: 0, grade: 0});
+
+    this.mainBrandSubject.next('');
+    this.mainSubject.next([]);
+    this.mainInfoSubject.next({price: 0, grade: 0});
+
+    this.osSubject.next([]);
+    this.osInfoSubject.next({price: 0});
+  }
+
+  delGoods(code: string): Observable<any> {
+    return this._http.post(baseUrl + 'delGoods', code, {headers: this.headers});
+  }
 }
 

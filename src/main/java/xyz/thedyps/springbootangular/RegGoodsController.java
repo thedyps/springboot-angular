@@ -3,6 +3,8 @@ package xyz.thedyps.springbootangular;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import xyz.thedyps.springbootangular.admin.adminVO.RegFilterVO;
+import xyz.thedyps.springbootangular.admin.adminVO.RegGoodsVO;
 import xyz.thedyps.springbootangular.admin.adminVO.RegInfoVO;
 import xyz.thedyps.springbootangular.admin.adminVO.RegPartsVO;
 import xyz.thedyps.springbootangular.service.RegGoodsService;
@@ -144,7 +146,6 @@ public class RegGoodsController {
         return this.service.getOsInfo(body);
     }
 
-
     @RequestMapping(path = "/latestCode", method = RequestMethod.GET)
     public String getLatestCode() {
         return this.service.getLatestCode();
@@ -155,4 +156,28 @@ public class RegGoodsController {
 
     @RequestMapping(path = "/regImg", method = RequestMethod.POST)
     public boolean regImg(@RequestBody Map body) { return this.service.regImg(body); }
+
+    @RequestMapping(path = "/getRegGoods", method = RequestMethod.PATCH)
+    public List<RegGoodsVO> getRegGoods(@RequestBody RegFilterVO body) {
+        return this.service.getRegGoods(body); }
+
+    @RequestMapping(path = "/getRegCount", method = RequestMethod.PATCH)
+    public int getRegCount(@RequestBody RegFilterVO body) {
+        return this.service.getRegCount(body);
+    }
+
+    @RequestMapping(path = "/uptGoods", method = RequestMethod.POST)
+    public boolean uptGoods(@RequestBody Map body) {
+        return this.service.uptGoods(body);
+    }
+
+    @RequestMapping(path = "/uptImage", method = RequestMethod.POST)
+    public boolean uptImage(@RequestBody Map body) {
+        return this.service.uptImage(body);
+    }
+
+    @RequestMapping(path = "/delGoods", method = RequestMethod.POST)
+    public boolean delGoods(@RequestBody String body) {
+        return this.service.delGoods(body);
+    }
 }

@@ -15,9 +15,6 @@ import {MessagesService} from "./shared/services/messages.service";
 import {UserService} from "./shared/services/user.service";
 import {CanActivateUserAuthGuardService} from "./shared/services/can-activate-user-auth-guard.service";
 import {CanActivateAdminAuthGuardService} from "./shared/services/can-activate-admin-auth-guard.service";
-import {RegGoodsService} from "./shared/services/reg-goods.service";
-import {UploadFileService} from "./shared/services/upload-file.service";
-import {ForNumberPipe} from "./shared/pipes/for-number.pipe";
 
 @NgModule({
   declarations: [
@@ -29,8 +26,7 @@ import {ForNumberPipe} from "./shared/pipes/for-number.pipe";
   ],
   providers: [{provide: APP_BASE_HREF, useValue: '/'}, GoodsListService, GoodsDetailService,
     GoodsSummaryResolverService, GoodsDetailResolverService, GoodsDetailImgResolverService, AuthService,
-    CanActivateUserAuthGuardService, CanActivateAdminAuthGuardService, MessagesService, UserService, RegGoodsService
-    , UploadFileService
+    CanActivateUserAuthGuardService, CanActivateAdminAuthGuardService, MessagesService, UserService
   ],
   bootstrap: [AppComponent]
 })

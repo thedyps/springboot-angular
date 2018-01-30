@@ -2,9 +2,7 @@ package xyz.thedyps.springbootangular.admin;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
-import xyz.thedyps.springbootangular.admin.adminVO.ImgListVO;
-import xyz.thedyps.springbootangular.admin.adminVO.RegInfoVO;
-import xyz.thedyps.springbootangular.admin.adminVO.RegPartsVO;
+import xyz.thedyps.springbootangular.admin.adminVO.*;
 
 import java.util.List;
 import java.util.Map;
@@ -51,8 +49,6 @@ public interface RegGoodsDAO {
 
     String getLatestCode();
 
-    List<String> getBrand();
-
     List<ImgListVO> getImgList(String param);
 
     boolean regImg(Map<String, Object> param);
@@ -72,4 +68,14 @@ public interface RegGoodsDAO {
     RegInfoVO getOsInfo(String param);
 
     boolean regGoods(Map param);
+
+    List<RegGoodsVO> getRegGoods(RegFilterVO param);
+
+    int getRegCount(RegFilterVO param);
+
+    boolean uptGoods(Map param);
+
+    boolean uptImg(Map<String, Object> param);
+
+    boolean delGoods(String param);
 }

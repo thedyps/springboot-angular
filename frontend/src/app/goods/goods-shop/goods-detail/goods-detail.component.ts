@@ -15,6 +15,7 @@ export class GoodsDetailComponent implements OnInit {
   goodsSummary$: Observable<PcSummary>;
   goodsDetail$: Observable<PcDetail>;
   goodsDetailImg$: Observable<PcDetailImg>;
+  goodsNumber: number = 1;
 
   constructor(private route: ActivatedRoute) { }
 
@@ -24,4 +25,13 @@ export class GoodsDetailComponent implements OnInit {
     this.goodsDetailImg$ = this.route.data.map(data => data['detailImg']);
   }
 
+  plus() {
+    this.goodsNumber += 1;
+  }
+
+  minus() {
+    if(this.goodsNumber > 1) {
+      this.goodsNumber -= 1;
+    }
+  }
 }

@@ -76,6 +76,7 @@
 		<if test="searchWord != null and searchWord != ''" >
 			AND (
 			P.brand LIKE '%' || #{searchWord} || '%'
+			OR P.code LIKE '%' || #{searchWord} || '%'
 			OR C.name LIKE '%' || #{searchWord} || '%'
 			OR C.brand LIKE '%' || #{searchWord} || '%'
 			OR R.name LIKE '%' || #{searchWord} || '%'
@@ -143,6 +144,7 @@
 		<if test="searchWord != null and searchWord != ''" >
 		AND (
 			P.brand LIKE '%' || #{searchWord} || '%'
+			OR P.code LIKE '%' || #{searchWord} || '%'
 			OR C.name LIKE '%' || #{searchWord} || '%'
 			OR C.brand LIKE '%' || #{searchWord} || '%'
 			OR R.name LIKE '%' || #{searchWord} || '%'

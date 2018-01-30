@@ -86,7 +86,6 @@ export class GoodsListService {
     if(currentPage  < this.pageCount)
     {
       currentPage += 1;
-      console.log('현재 페이지 넘버는' + currentPage + '페이지 카운트는' + this.pageCount);
       return this.loadPage(pcType, currentPage);
     }
   }

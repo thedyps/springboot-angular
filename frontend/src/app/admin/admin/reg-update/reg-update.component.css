@@ -1,0 +1,12 @@
+.btn-toolbar-wrapper {
+  width: 100%;
+}
+
+.btn-toolbar {
+  width: 550px;
+  margin: 0px auto 0px auto;
+}
+
+.star {
+  color: gold;
+}

@@ -6,7 +6,7 @@
         <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
           <div></div>
           <div>
-            <a href="pcDetail.jsp?code={{pc.pcCode}}">
+            <a [routerLink]="['/goods/detail', pc.pcCode]">
               <img [src]="'assets/images/'+pc.pcListImg.mainImg" class="img-responsive center-block">
             </a>
           </div>
@@ -14,7 +14,7 @@
         </div>
         <div class="col-lg-6 col-md-8 col-sm-8 col-xs-12">
           <div>
-            <a href="pcDetail.jsp?code={{pc.pcCode}}">
+            <a [routerLink]="['/goods/detail', pc.pcCode]">
               <img [src]="'assets/images/'+pc.pcListImg.brandImg">
             </a>
           </div>
@@ -35,8 +35,8 @@
         <div class="col-lg-3 col-md-12 col-sm-8 col-xs-12">
           <div>
             <div>
-              <a href="pcDetail.jsp?code={{pc.pcCode}}">
-                <span><strong>{{pc.pcPrice|currency:'KRW'}}</strong></span>
+              <a [routerLink]="['/goods/detail', pc.pcCode]">
+              <span><strong>{{pc.pcPrice|currency:'KRW'}}</strong></span>
               </a>
             </div>
             <div>

@@ -3,11 +3,8 @@ package xyz.thedyps.springbootangular.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import xyz.thedyps.springbootangular.admin.RegGoodsDAO;
-import xyz.thedyps.springbootangular.admin.adminVO.ImgListVO;
-import xyz.thedyps.springbootangular.admin.adminVO.RegInfoVO;
-import xyz.thedyps.springbootangular.admin.adminVO.RegPartsVO;
+import xyz.thedyps.springbootangular.admin.adminVO.*;
 
-import java.awt.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -136,18 +133,47 @@ public class RegGoodsService {
 
     public boolean regImg(Map body) {
         List<ImgListVO> imgList = this.regGoodsDAO.getImgList(body.get("brand").toString());
+        Map<String, Object> param = new HashMap<>();;
+        boolean chk = false;
+        for(ImgListVO img: imgList) {
+            param.put("pccode", body.get("code").toString());
+            param.put("imgorder", img.getImgOrder());
+            param.put("imgpath", img.getImgPath());
+            chk = this.regGoodsDAO.regImg(param);
+            param.clear();
+        }
+        param = null;
+        return chk;
+    }
+
+    public int getRegCount(RegFilterVO body) {
+        return this.regGoodsDAO.getRegCount(body);
+    }
+
+    public List<RegGoodsVO> getRegGoods(RegFilterVO body){
+        return this.regGoodsDAO.getRegGoods(body);
+    }
+
+    public boolean uptGoods(Map param) {
+        return this.regGoodsDAO.uptGoods(param);
+    }
+
+    public boolean uptImage(Map body) {
+        List<ImgListVO> imgList = this.regGoodsDAO.getImgList(body.get("brand").toString());
         Map<String, Object> param = new HashMap<>();
         boolean chk = false;
         for(ImgListVO img: imgList) {
             param.put("pccode", body.get("code").toString());
             param.put("imgorder", img.getImgOrder());
             param.put("imgpath", img.getImgPath());
-
-            chk = this.regGoodsDAO.regImg(param);
+            chk = this.regGoodsDAO.uptImg(param);
+            param.clear();
         }
         param = null;
         return chk;
     }
 
-
+    public boolean delGoods(String body) {
+        return this.regGoodsDAO.delGoods(body);
+    }
 }

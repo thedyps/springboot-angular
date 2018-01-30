@@ -37,7 +37,6 @@ public class PcListService {
 
     public int getSearchPcCount(String pcType, PcSearchParamVO param) {
         param.setPcType(pcType);
-        System.out.println(param.getFilterPcBrand().size() + " 테스트 ######################" + param.getFilterCpuKind().size());
         return pcListDAO.getSearchPcCount(param);
     }
 

@@ -1,21 +1,33 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {RegGoodsService} from "../../../shared/services/reg-goods.service";
 import {Observable} from "rxjs/Observable";
-
-
+import {RegFilter, RegGoods, RegPageNum} from "../../../shared/model/regGoods";
+import 'rxjs/add/operator/map';
 
 @Component({
-  selector: 'app-reg-goods',
-  templateUrl: './reg-goods.component.html',
-  styleUrls: ['./reg-goods.component.css'],
+  selector: 'app-reg-update',
+  templateUrl: './reg-update.component.html',
+  styleUrls: ['./reg-update.component.css'],
   providers: [RegGoodsService]
-
 })
-
-export class RegGoodsComponent implements OnInit {
+export class RegUpdateComponent implements OnInit {
   brandList: string[] = ['ASUS', 'GIGABYTE', 'LENOVO', 'MSI', 'SMARTCOM'];
   typeList: string[] = ['Basic', 'Game', 'Middle', 'Office', '3D'];
-  code$: Observable<string>;
+  regGoods$: Observable<RegGoods[]>;
+  regPageNum$: Observable<RegPageNum>;
+  num: number = 1;
+  filter: RegFilter = {
+    'code': '',
+    'type': 'All',
+    'brand': '',
+    'start': 1,
+    'end': 10
+  };
+
+  updateChk: boolean = false;
+  gradeUptChk: boolean = false;
+  selectGoods: RegGoods;
+
   priceSum$: Observable<number>;
   gradeAvg$: Observable<number>;
   cpuObservables: { [key:string]:Observable<any>; } = {};
@@ -29,8 +41,17 @@ export class RegGoodsComponent implements OnInit {
   constructor(private regGoodsService: RegGoodsService) { }
 
   ngOnInit() {
-    this.code$ = this.regGoodsService.code$;
-    this.regGoodsService.getLatestCode().subscribe();
+    this.regGoodsService.regFilterSub().subscribe();
+    this.regGoodsService.regCountSub().subscribe();
+    this.regGoodsService.regPageCountSub().subscribe();
+
+    this.regGoods$ = this.regGoodsService.regGoods$;
+    this.regPageNum$ = this.regGoodsService.regPageNum$;
+
+    this.regGoodsService.loadRegGoodsRecord(this.num)
+      .map(data => data[0]).subscribe();
+    this.regGoodsService.loadRegGoodsRecord(this.num)
+      .map(data => data[1]).subscribe();
 
     this.priceSum$ = this.regGoodsService.priceSum$;
     this.regGoodsService.getPriceSum().subscribe();
@@ -69,6 +90,55 @@ export class RegGoodsComponent implements OnInit {
 
     this.osObservables['os'] = this.regGoodsService.os$;
     this.osObservables['osInfo'] = this.regGoodsService.osInfo$;
+  }
+
+  Search(formData: any) {
+    this.filter.code = formData.code;
+    this.filter.type = formData.type!=''?formData.type:'All';
+    this.filter.brand = formData.brand;
+
+    this.regGoodsService.setRegFilter(this.filter);
+    this.regGoodsService.loadRegGoodsRecord(this.num)
+      .map(data => data[0]).subscribe();
+    this.regGoodsService.loadRegGoodsRecord(this.num)
+      .map(data => data[1]).subscribe();
+  }
+
+  toPreRecord() {
+    this.regGoodsService.preRecord(this.num).map(data => data[1]).subscribe(
+      () => {},
+      () => {},
+      () => {this.num -= 1;}
+    );
+  }
+
+  toNextRecord() {
+    this.regGoodsService.nextRecord(this.num).map(data => data[1]).subscribe(
+      () => {},
+      () => {},
+      () => {this.num += 1;}
+    );
+  }
+
+  recordChange(num: number) {
+    this.regGoodsService.recordChange(num).map(data => data[1]).subscribe(
+      () => {},
+      () => {},
+      () => {this.num = num;}
+    );
+  }
+
+  showUpdateForm(selectGoods: RegGoods) {
+    console.log(JSON.stringify(selectGoods));
+    this.selectGoods = selectGoods;
+    this.updateChk = true;
+  }
+
+  showRecord() {
+    this.selectGoods = null;
+    this.updateChk = false;
+    this.gradeUptChk = false;
+    this.regGoodsService.searchClear();
   }
 
   getCpuBrand() {
@@ -207,46 +277,59 @@ export class RegGoodsComponent implements OnInit {
     }
   }
 
-  onSubmit(formValue: any, formValid: boolean) {
+  setGrade() {
+    this.gradeUptChk = true;
+  }
+
+  regUpdate(formValue: any, formValid: boolean) {
     console.log(formValue);
-    if(formValid && formValue.cpu && formValue.ram && formValue.gra
-      && (formValue.hdd || formValue.ssd) && formValue.main && formValue.os) {
+    if(formValid) {
       console.log(formValue);
-      this.regGoodsService.register(
+      this.regGoodsService.uptGoods(
         {
-          'avgGrade': formValue.avgGrade,
-          'brand': formValue.brand,
-          'code': formValue.code,
-          'cpu': formValue.cpu,
+          'avgGrade': this.gradeUptChk?formValue.avgGrade:this.selectGoods.pcGrade,
+          'brand': formValue.uptBrand,
+          'code': formValue.uptCode,
+          'cpu': formValue.cpu?formValue.cpu:this.selectGoods.cpuCode,
           'deliPrice': formValue.deliPrice,
-          'gra': formValue.gra,
-          'hdd': formValue.hdd?formValue.hdd:'',
-          'main': formValue.main,
-          'os': formValue.os,
-          'ram': formValue.ram,
-          'ssd': formValue.ssd?formValue.ssd:'',
+          'gra': formValue.gra?formValue.gra:this.selectGoods.graCode,
+          'hdd': formValue.hdd?formValue.hdd:this.selectGoods.hddCode,
+          'main': formValue.main?formValue.main:this.selectGoods.mainCode,
+          'os': formValue.os?formValue.os:this.selectGoods.osCode,
+          'ram': formValue.ram?formValue.ram:this.selectGoods.ramCode,
+          'ssd': formValue.ssd?formValue.ssd:this.selectGoods.ssdCode,
           'stock': formValue.stock,
           'sumPrice': formValue.sumPrice,
-          'type': formValue.type
+          'type': formValue.uptType
         }
       ).subscribe(
         () => {},
         () => {},
         () => {
-          this.regGoodsService.regImg({'code': formValue.code, 'brand': formValue.brand})
+          this.regGoodsService.uptImage({'code': formValue.uptCode, 'brand': formValue.uptBrand})
             .subscribe(
               () => {},
               () => {},
               () => {
-                location.reload()
+                this.regGoodsService.recordChange(this.num).map(data => data[1]).subscribe(
+                  () => {},
+                  () => {},
+                  () => { this.showRecord() }
+                );
               }
             );
         }
       );
     }
   }
+
+  delGoods(code: any) {
+    this.regGoodsService.delGoods(code).subscribe(
+      () => {},
+      () => {},
+      () => {
+        this.regGoodsService.recordChange(this.num).map(data => data[1]).subscribe();
+      }
+    )
+  }
 }
-
-
-
-

@@ -1,3 +1,19 @@
-<p>
-  navbar works!
-</p>
+<nav class="navbar navbar-light">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand title" [routerLink]="['/goods/list', 'All', 1]">
+        SMARTCOM
+      </a>
+    </div>
+    <ul class="nav navbar-nav navbar-right">
+      <li class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#">관리자 메뉴
+          <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          <li *ngIf="adminCheck"><a routerLink="/admin/reggoods">상품 등록</a></li>
+          <li *ngIf="adminCheck"><a routerLink="/admin/regupdate">상품 수정 및 삭제</a></li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</nav>

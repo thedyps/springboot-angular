@@ -1,7 +1,7 @@
 <nav class="navbar navbar-light">
   <div class="container-fluid">
     <div class="navbar-header">
-      <a class="navbar-brand title" href="#">
+      <a class="navbar-brand title" [routerLink]="['/goods/list', 'All', 1]">
         SMARTCOM
       </a>
     </div>
@@ -14,7 +14,7 @@
           <li *ngIf="!loginCheck"><a routerLink="/member/register">회원가입</a></li>
           <li *ngIf="loginCheck" (click)="logOut()"><a>로그아웃</a></li>
           <li *ngIf="loginCheck"><a routerLink="/member/dashboard">마이 페이지</a></li>
-          <li *ngIf="adminCheck"><a routerLink="/admin/goodsadd">관리자 페이지</a></li>
+          <li *ngIf="adminCheck"><a routerLink="/admin/reggoods">관리자 페이지</a></li>
         </ul>
       </li>
     </ul>
