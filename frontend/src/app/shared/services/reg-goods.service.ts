@@ -10,12 +10,7 @@ import 'rxjs/add/operator/first'
 import 'rxjs/add/operator/switchMap'
 
 const baseUrl = 'api/admin/regGoods/';
-const UNKNOWN_REG_GOODS: RegGoods = {
-  pcPrice: 0, pcDeliprice: 0 , pcGrade: 0 , pcStock: 0,
-  pcCode: '', pcBrand: '', pcType: '',
-  cpuCode: '', cpuName: '', ramCode: '', ramName: '', mainCode: '', mainName: '',
-  graCode: '', graName: '', osCode: '', osName: ''
-};
+
 const UNKNOWN_REG_PAGE_NUM: RegPageNum = {
   startPage:0,
   endPage:0,
@@ -50,6 +45,15 @@ export class RegGoodsService {
     )
   }
 
+  setPriceSum(priceParam: { [key:string]:number }) {
+    this.price = Object.assign({}, priceParam);
+    let sum = 0;
+    for(let key in priceParam) {
+      sum += priceParam[key];
+    }
+    this.priceSumSubject.next(sum);
+  }
+
   private grade: { [key:string]:number; } = {};
   private gradeSubject = new BehaviorSubject<{ [key:string]:number } >({});
   private grade$: Observable<{ [key:string]:number} > = this.gradeSubject.asObservable();
@@ -63,8 +67,10 @@ export class RegGoodsService {
         let sum = 0;
         let num = 0;
         for(let key in data) {
-          sum += data[key];
-          num += 1;
+          if(data[key] != 0 ) {
+            sum += data[key];
+            num += 1;
+          }
         }
         if(sum > 0 && num > 0) {
           let avg = Math.round(Math.round(sum / num) / 10);
@@ -72,6 +78,22 @@ export class RegGoodsService {
         }
       }
     );
+  }
+
+  setGradeAvg(gradeParam: { [key:string]:number }) {
+    this.grade = Object.assign({}, gradeParam);
+    let sum = 0;
+    let num = 0;
+    for(let key in gradeParam) {
+      if(gradeParam[key] != 0 ) {
+        sum += gradeParam[key];
+        num += 1;
+      }
+    }
+    if(sum > 0 && num > 0) {
+      let avg = Math.round(Math.round(sum / num) / 10);
+      this.gradeAvgSubject.next(avg);
+    }
   }
 
   private cpuBrandSubject = new BehaviorSubject<string>('');

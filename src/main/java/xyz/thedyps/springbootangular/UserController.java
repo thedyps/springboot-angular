@@ -49,4 +49,12 @@ public class UserController {
         user.setId(username);
         return userService.uptUser(user);
     }
+
+    @RequestMapping(value = "/updateUserPw", method = RequestMethod.POST)
+    public boolean uptUserPw(HttpServletRequest request, @RequestBody User user) {
+        String token = request.getHeader(tokenHeader).substring(7);
+        String username = jwtTokenUtil.getUsernameFromToken(token);
+        user.setId(username);
+        return userService.uptUserPw(user);
+    }
 }

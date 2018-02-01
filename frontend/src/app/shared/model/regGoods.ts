@@ -13,6 +13,9 @@ export interface RegGoods {
   pcCode, pcBrand, pcType: string;
   cpuCode, cpuName, ramCode, ramName, mainCode, mainName,
   hddCode?, hddName?, ssdCode?, ssdName?, graCode, graName, osCode, osName: string;
+
+  cpuPrice, ramPrice, graPrice, hddPrice?, ssdPrice?, mainPrice, osPrice: number;
+  cpuGrade, ramGrade, graGrade, hddGrade?, ssdGrade?, mainGrade: number;
 }
 
 export interface RegPageNum {

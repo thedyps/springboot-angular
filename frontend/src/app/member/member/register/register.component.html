@@ -16,12 +16,18 @@
               <div *ngIf="id.errors.minlength">
                 아이디는 4글자 이상이어야 합니다.
               </div>
+              <div *ngIf="id.errors.maxlength">
+                아이디는 16글자 이하이어야 합니다.
+              </div>
               <div *ngIf="id.errors.idFormat">
                 아이디의 형식이 잘못되었습니다.
               </div>
             </div>
-            <div *ngIf="(idDupCheck$ | async) && id.valid" class="alert alert-danger">
+            <div *ngIf="(idDupCheck$ | async) && isIdDupCheck" class="alert alert-danger">
               아이디가 중복되었습니다.
+            </div>
+            <div *ngIf="!(idDupCheck$ | async) && isIdDupCheck" class="alert alert-success">
+              아이디가 사용 가능합니다.
             </div>
           </div>
           <div formGroupName="passwordWrap">
@@ -34,7 +40,10 @@
                   패스워드가 필요합니다.
                 </div>
                 <div *ngIf="password.errors.minlength">
-                  패스워드는 8글자 이상 15글자 이하입니다.
+                  패스워드는 8글자 이상이어야 합니다.
+                </div>
+                <div *ngIf="password.errors.maxlength">
+                  패스워드는 16글자 이하이어야 합니다.
                 </div>
                 <div *ngIf="password.errors.passwordFormat">
                   패스워드의 형식이 잘못되었습니다.

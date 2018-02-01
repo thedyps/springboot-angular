@@ -145,13 +145,13 @@
     SELECT ROWNUM rnum, result.* FROM (
     SELECT P.code pc_code, P.brand pc_brand, P.type pc_type,
     P.price pc_price, P.DELIVERYPRICE pc_deliprice, P.grade pc_grade, P.stock pc_stock,
-    C.code cpu_code, C.name cpu_name,
-    R.code ram_code, R.name ram_name,
-    M.code main_code, M.name main_name,
-    H.code hdd_code, H.name hdd_name,
-    S.code ssd_code, S.name ssd_name,
-    G.code gra_code, G.name gra_name,
-    O.code os_code, O.name os_name
+    C.code cpu_code, C.name cpu_name, C.price cpu_price, c.grade cpu_grade,
+    R.code ram_code, R.name ram_name, R.price ram_price, r.grade ram_grade,
+    M.code main_code, M.name main_name, M.price main_price, m.grade main_grade,
+    H.code hdd_code, H.name hdd_name, H.price hdd_price, H.grade hdd_grade,
+    S.code ssd_code, S.name ssd_name, S.price ssd_price, S.grade ssd_grade,
+    G.code gra_code, G.name gra_name, G.price gra_price, G.grade gra_grade,
+    O.code os_code, O.name os_name, O.price os_price
     FROM PC P
     JOIN CPU C ON P.cpu = C.code
     JOIN RAM R ON P.ram = R.code

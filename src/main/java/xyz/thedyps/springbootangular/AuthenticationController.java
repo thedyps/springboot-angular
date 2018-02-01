@@ -56,4 +56,23 @@ public class AuthenticationController {
         // Return the token
         return ResponseEntity.ok(new JwtAuthenticationResponse(token));
     }
+
+    // 로그인 요청시에 실행한다.
+    @RequestMapping(path = "/isExist", method = RequestMethod.POST)
+    public boolean isExist(@RequestBody JwtAuthenticationRequest authenticationRequest, Device device) throws AuthenticationException {
+        // 클라이언트 사이드에서 전송한 authenticationRequest의 아이디와 패스워드를 사용한다.
+        final Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        authenticationRequest.getId(),
+                        authenticationRequest.getPw()
+                )
+
+        );
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        if(userDetailsService.loadUserByUsername(authenticationRequest.getId()) != null) {
+            return true;
+        }
+        return false;
+    }
 }

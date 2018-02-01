@@ -28,7 +28,7 @@ export class UserService {
   constructor(private _http: HttpClient, private authService: AuthService) { }
 
   register(user: UserInfo) {
-    return this._http.post('/api/auth/register', user);
+    return this._http.post('/api/user/register', user);
   }
 
   getId(id: string) {
@@ -47,6 +47,12 @@ export class UserService {
 
   updateUserInfo(user: UserInfo) {
     return this._http.post<boolean>('/api/user/updateUserInfo', user, {
+      headers: new HttpHeaders().set('Authorization', 'Bearer ' + this.authService.getToken()['token'])
+    });
+  }
+
+  updateUserPw(user: UserInfo) {
+    return this._http.post<boolean>('/api/user/updateUserPw', user, {
       headers: new HttpHeaders().set('Authorization', 'Bearer ' + this.authService.getToken()['token'])
     });
   }

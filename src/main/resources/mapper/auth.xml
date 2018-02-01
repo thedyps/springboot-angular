@@ -22,6 +22,10 @@
     </select>
 
     <update id="uptUser" parameterType="xyz.thedyps.springbootangular.jwt.model.User">
-        UPDATE USERS SET pw = #{pw}, name=#{name}, email=#{email}, address=#{address}, phone=#{phone} WHERE id = #{id}
+        UPDATE USERS SET name=#{name}, email=#{email}, address=#{address}, phone=#{phone} WHERE id = #{id}
+    </update>
+
+    <update id="uptUserPw" parameterType="xyz.thedyps.springbootangular.jwt.model.User">
+        UPDATE USERS SET pw=#{pw} WHERE id = #{id}
     </update>
 </mapper>

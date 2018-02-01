@@ -12,6 +12,6 @@ export class MessagesService {
 
   error(...errors: string[]) {
     this.errorSubject.next(errors);
+    window.scroll(0, 0);
   }
-
 }

@@ -36,19 +36,22 @@
           <div>
             <div>
               <a [routerLink]="['/goods/detail', pc.pcCode]">
-              <span><strong>{{pc.pcPrice|currency:'KRW'}}</strong></span>
+              <span><strong>{{pc.pcPrice|currency:'KRW':'symbol':'0.0-0'}}</strong></span>
               </a>
             </div>
             <div>
               <span>예상 배송일: {{pc.deliveryDate}}</span>
             </div>
             <div>
-              <span *ngIf="pc.pcDeliprice > 0">배송료 : {{pc.pcDeliprice|currency:'KRW'}}</span>
+              <span *ngIf="pc.pcDeliprice > 0">배송료 : {{pc.pcDeliprice|currency:'KRW':'symbol':'0.0-0'}}</span>
               <span *ngIf="pc.pcDeliprice <= 0">배송료 : 무료 배송</span>
             </div>
           </div>
           <div>
             <strong>등급:</strong>
+            <span class="glyphicon glyphicon-star"
+                  *ngFor="let num of 1 | forNumber:1:pc.pcGrade" style="color:gold">
+            </span>
             <ul>
               <li><strong>CPU: </strong>{{pc.cpuKind}} {{pc.cpuName}} {{pc.cpuSpeed}}</li>
               <li><strong>메모리: </strong>{{pc.mainBoardRamLimit}} {{pc.ramSpeed}}</li>
@@ -86,4 +89,6 @@
       </div>
     </div>
   </div>
+
 </div>
+

@@ -25,7 +25,6 @@ export class RegUpdateComponent implements OnInit {
   };
 
   updateChk: boolean = false;
-  gradeUptChk: boolean = false;
   selectGoods: RegGoods;
 
   priceSum$: Observable<number>;
@@ -37,6 +36,9 @@ export class RegUpdateComponent implements OnInit {
   ssdObservables: { [key:string]:Observable<any>; } = {};
   mainObservables: { [key:string]:Observable<any>; } = {};
   osObservables: { [key:string]:Observable<any>; } = {};
+
+  private price: { [key:string]:number; } = {};
+  private grade: { [key:string]:number; } = {};
 
   constructor(private regGoodsService: RegGoodsService) { }
 
@@ -93,6 +95,7 @@ export class RegUpdateComponent implements OnInit {
   }
 
   Search(formData: any) {
+    this.num = 1;
     this.filter.code = formData.code;
     this.filter.type = formData.type!=''?formData.type:'All';
     this.filter.brand = formData.brand;
@@ -129,7 +132,24 @@ export class RegUpdateComponent implements OnInit {
   }
 
   showUpdateForm(selectGoods: RegGoods) {
-    console.log(JSON.stringify(selectGoods));
+    this.price['cpu'] = selectGoods.cpuPrice;
+    this.price['ram'] = selectGoods.ramPrice;
+    this.price['gra'] = selectGoods.graPrice;
+    this.price['hdd'] = selectGoods.hddPrice;
+    this.price['ssd'] = selectGoods.ssdPrice;
+    this.price['main'] = selectGoods.mainPrice;
+    this.price['os'] = selectGoods.osPrice;
+
+    this.grade['cpu'] = selectGoods.cpuGrade;
+    this.grade['ram'] = selectGoods.ramGrade;
+    this.grade['gra'] = selectGoods.graGrade;
+    this.grade['hdd'] = selectGoods.hddGrade;
+    this.grade['ssd'] = selectGoods.ssdGrade;
+    this.grade['main'] = selectGoods.mainGrade;
+
+    this.regGoodsService.setPriceSum(this.price);
+    this.regGoodsService.setGradeAvg(this.grade);
+
     this.selectGoods = selectGoods;
     this.updateChk = true;
   }
@@ -137,7 +157,6 @@ export class RegUpdateComponent implements OnInit {
   showRecord() {
     this.selectGoods = null;
     this.updateChk = false;
-    this.gradeUptChk = false;
     this.regGoodsService.searchClear();
   }
 
@@ -277,9 +296,6 @@ export class RegUpdateComponent implements OnInit {
     }
   }
 
-  setGrade() {
-    this.gradeUptChk = true;
-  }
 
   regUpdate(formValue: any, formValid: boolean) {
     console.log(formValue);
@@ -287,7 +303,7 @@ export class RegUpdateComponent implements OnInit {
       console.log(formValue);
       this.regGoodsService.uptGoods(
         {
-          'avgGrade': this.gradeUptChk?formValue.avgGrade:this.selectGoods.pcGrade,
+          'avgGrade': formValue.avgGrade,
           'brand': formValue.uptBrand,
           'code': formValue.uptCode,
           'cpu': formValue.cpu?formValue.cpu:this.selectGoods.cpuCode,

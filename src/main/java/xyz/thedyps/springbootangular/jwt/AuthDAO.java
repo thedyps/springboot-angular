@@ -6,6 +6,7 @@ import xyz.thedyps.springbootangular.jwt.model.Authority;
 import xyz.thedyps.springbootangular.jwt.model.User;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 @Repository
@@ -16,4 +17,5 @@ public interface AuthDAO {
     boolean insUser(User user);
     String getUserId(String id);
     boolean uptUser(User user);
+    boolean uptUserPw(User user);
 }

@@ -18,6 +18,7 @@ export class RegisterComponent implements OnInit {
   model = new UserInfo();
   regForm: FormGroup;
   idDupCheck$: Observable<boolean>;
+  isIdDupCheck: boolean = false;
 
   constructor(private userService: UserService, private router: Router, private messagesService: MessagesService,
               private authService: AuthService) {
@@ -33,12 +34,14 @@ export class RegisterComponent implements OnInit {
       'id': new FormControl('', [
         Validators.required,
         Validators.minLength(4),
+        Validators.maxLength(16),
         idValidator()
       ]),
       'passwordWrap': new FormGroup({
         'password': new FormControl('', [
           Validators.required,
           Validators.minLength(8),
+          Validators.maxLength(16),
           passWordValidator()]),
         'passwordConfirm': new FormControl('')
         }, [equalValidator('password', 'passwordConfirm')]
@@ -58,6 +61,9 @@ export class RegisterComponent implements OnInit {
         emailValidator()
       ]),
     });
+    this.id.valueChanges.subscribe(
+      () => this.isIdDupCheck = false
+    )
   }
 
   get id() { return this.regForm.get('id'); }
@@ -92,6 +98,7 @@ export class RegisterComponent implements OnInit {
   }
 
   checkIdDup() {
+    this.isIdDupCheck = true;
     this.userService.getId(this.id.value).subscribe();
   }
 }

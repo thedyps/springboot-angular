@@ -567,15 +567,8 @@
           <th>항목 등급 평균</th>
           <td colspan="2">
             <input type="hidden" [ngModel]="gradeAvg$ | async" name="avgGrade" #avgGrade>
-            <div *ngIf="gradeAvg$ | async else before">
-              <span class="glyphicon glyphicon-star star"
-                    *ngFor="let num of 1 | forNumber:1:(gradeAvg$ | async)"></span>
-            </div>
-            <ng-template #before>
-              <span class="glyphicon glyphicon-star star"
-                    *ngFor="let num of 1 | forNumber:1:selectGoods.pcGrade"></span>
-            </ng-template><br>
-            <button type="button" class="btn btn-primary" (click)="setGrade()">등급 수정</button>
+            <span class="glyphicon glyphicon-star star"
+                  *ngFor="let num of 1 | forNumber:1:(gradeAvg$ | async)"></span>
           </td>
         </tr>
         <tr>

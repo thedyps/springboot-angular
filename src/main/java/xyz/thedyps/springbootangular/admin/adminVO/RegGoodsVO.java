@@ -5,6 +5,112 @@ public class RegGoodsVO {
     private String pcCode, pcBrand, pcType;
     private String cpuCode, cpuName, ramCode, ramName, mainCode, mainName,
             hddCode, hddName, ssdCode, ssdName, graCode, graName, osCode, osName;
+    private int cpuPrice, ramPrice, graPrice, hddPrice, ssdPrice, mainPrice, osPrice;
+    private int cpuGrade, ramGrade, graGrade, hddGrade, ssdGrade, mainGrade;
+
+    public int getMainPrice() {
+        return mainPrice;
+    }
+
+    public void setMainPrice(int mainPrice) {
+        this.mainPrice = mainPrice;
+    }
+
+    public int getMainGrade() {
+        return mainGrade;
+    }
+
+    public void setMainGrade(int mainGrade) {
+        this.mainGrade = mainGrade;
+    }
+
+    public int getCpuPrice() {
+        return cpuPrice;
+    }
+
+    public void setCpuPrice(int cpuPrice) {
+        this.cpuPrice = cpuPrice;
+    }
+
+    public int getRamPrice() {
+        return ramPrice;
+    }
+
+    public void setRamPrice(int ramPrice) {
+        this.ramPrice = ramPrice;
+    }
+
+    public int getGraPrice() {
+        return graPrice;
+    }
+
+    public void setGraPrice(int graPrice) {
+        this.graPrice = graPrice;
+    }
+
+    public int getHddPrice() {
+        return hddPrice;
+    }
+
+    public void setHddPrice(int hddPrice) {
+        this.hddPrice = hddPrice;
+    }
+
+    public int getSsdPrice() {
+        return ssdPrice;
+    }
+
+    public void setSsdPrice(int ssdPrice) {
+        this.ssdPrice = ssdPrice;
+    }
+
+    public int getOsPrice() {
+        return osPrice;
+    }
+
+    public void setOsPrice(int osPrice) {
+        this.osPrice = osPrice;
+    }
+
+    public int getCpuGrade() {
+        return cpuGrade;
+    }
+
+    public void setCpuGrade(int cpuGrade) {
+        this.cpuGrade = cpuGrade;
+    }
+
+    public int getRamGrade() {
+        return ramGrade;
+    }
+
+    public void setRamGrade(int ramGrade) {
+        this.ramGrade = ramGrade;
+    }
+
+    public int getGraGrade() {
+        return graGrade;
+    }
+
+    public void setGraGrade(int graGrade) {
+        this.graGrade = graGrade;
+    }
+
+    public int getHddGrade() {
+        return hddGrade;
+    }
+
+    public void setHddGrade(int hddGrade) {
+        this.hddGrade = hddGrade;
+    }
+
+    public int getSsdGrade() {
+        return ssdGrade;
+    }
+
+    public void setSsdGrade(int ssdGrade) {
+        this.ssdGrade = ssdGrade;
+    }
 
     public int getPcPrice() {
         return pcPrice;

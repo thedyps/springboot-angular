@@ -5,6 +5,9 @@ import {UserInfo} from "../../../shared/model/user-Info";
 import {emailValidator, equalValidator, passWordValidator, phoneValidator} from "../register/regValidator";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {MessagesService} from "../../../shared/services/messages.service";
+import {AuthService} from "../../../shared/services/auth.service";
+import {Login} from "../../../shared/model/login";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-dashboard',
@@ -16,8 +19,10 @@ export class DashboardComponent implements OnInit {
   model = new UserInfo();
   regForm: FormGroup;
   userInfo$: Observable<UserInfo>;
+  pwUptCheck: boolean = false;
 
-  constructor(private userService: UserService, private messagesService: MessagesService) {
+  constructor(private authService: AuthService, private userService: UserService,
+              private messagesService: MessagesService, private router: Router) {
   }
 
   ngOnInit() {
@@ -25,22 +30,14 @@ export class DashboardComponent implements OnInit {
     this.userService.getUserInfo().subscribe(
       data => {
       this.model.id = data.id;
-      this.model.pw = data.pw;
       this.model.address = data.address;
       this.model.email = data.email;
       this.model.name = data.name;
       this.model.phone = data.phone;
+      this.model.pw = '';
     });
     this.regForm = new FormGroup({
       'id': new FormControl({value: this.model.id, disabled: true}),
-      'passwordWrap': new FormGroup({
-          'password': new FormControl(this.model.pw, [
-            Validators.required,
-            Validators.minLength(8),
-            passWordValidator()]),
-          'passwordConfirm': new FormControl()
-        }, [equalValidator('password', 'passwordConfirm')]
-      ),
       'name': new FormControl(this.model.name, [
         Validators.required,
       ]),
@@ -74,20 +71,67 @@ export class DashboardComponent implements OnInit {
 
   get email() { return this.regForm.get('email'); }
 
+  get beforePassword() {
+    return this.regForm.get('beforePassword');
+  }
+
+  showPwUpt() {
+    this.regForm.addControl('beforePassword',
+      new FormControl('', [ Validators.minLength(8), passWordValidator()]));
+    this.regForm.addControl('passwordWrap', new FormGroup({
+        'password': new FormControl(this.model.pw,[
+          Validators.minLength(8),
+          passWordValidator()]),
+        'passwordConfirm': new FormControl('')
+      }, [equalValidator('password', 'passwordConfirm')]
+    ));
+    this.pwUptCheck = true;
+  }
 
   onSubmit() {
-    if(this.regForm.valid) {
-      this.userService.updateUserInfo(this.model)
-        .subscribe(
-          () => {},
-          () => {
-            this.messagesService.error('회원 정보 수정이 불가능합니다.');
-          },
-          () => {location.reload()}
-        );
-    }
-    if(!this.regForm.valid) {
-      this.messagesService.error('회원 정보 수정이 불가능합니다.');
+    if(!this.pwUptCheck) {
+      if(this.regForm.valid) {
+        this.userService.updateUserInfo(this.model)
+          .subscribe(
+            () => {},
+            () => {this.messagesService.error('회원 정보 수정이 불가능합니다.');},
+            () => {location.reload()}
+          )
+      } else {
+        this.messagesService.error('회원 정보 수정이 불가능합니다.');
+      }
+    } else {
+      if(this.regForm.valid) {
+        let login = new Login();
+        login.id = this.id.value;
+        login.pw = this.beforePassword.value;
+        this.authService.isExist(login)
+          .subscribe(
+            () => {},
+            () => {this.messagesService.error('회원 정보 수정이 불가능합니다.', '기본 패스워드가 잘못되었습니다.');},
+            () => {
+              this.userService.updateUserInfo(this.model)
+                .subscribe(
+                  () => {},
+                  () => {this.messagesService.error('회원 정보 수정이 불가능합니다.');},
+                  () => {
+                    this.userService.updateUserPw(this.model)
+                      .subscribe(
+                        () => {},
+                        () => {this.messagesService.error('회원 정보 수정이 불가능합니다.');},
+                        () => {
+                          this.pwUptCheck = false;
+                          this.authService.logOut();
+                          this.router.navigate(['/member/login']);
+                        }
+                      )
+                  }
+                )
+            }
+          )
+      } else {
+        this.messagesService.error('회원 정보 수정이 불가능합니다.');
+      }
     }
   }
 }
